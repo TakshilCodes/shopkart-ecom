@@ -1,0 +1,35 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id String @default(uuid()) @id
+  DisplayName String?
+  username String @unique
+  email String @unique
+  Hashpassword String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model product {
+  id String @default(uuid()) @id
+  category String
+  Name String
+  prodImage String
+  price Decimal
+  Sizes Json?
+  slug String @unique
+  isPublished Boolean @default(true)
+  inStock Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id,Name,prodImage,category,price,Sizes,slug,isPublished,inStock])
+}
