@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import closeImg from '@/assets/icons/close.png'
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function Filter() {

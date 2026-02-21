@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import Filter from "@/components/Filter";
+import Search from "@/components/Search";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
@@ -11,11 +12,13 @@ export default async function Products({
 
     const params = await searchParams;
     const currentpage = params?.page ?? 1;
+
     const rawPrice = params?.price;
-
     const price = typeof rawPrice === "string" ? Number(rawPrice) : Array.isArray(rawPrice) ? Number(rawPrice[0]) : 200000;
-
     const safePrice = Number.isFinite(price) ? price : 200000;
+
+    const rawSearch = params?.search ?? '';
+    const search = Array.isArray(rawSearch) ? String(rawSearch[0]) : rawSearch;
 
     const toSkipItems = (Number(currentpage) - 1) * 25;
 
@@ -25,6 +28,10 @@ export default async function Products({
             price: {
                 lte: safePrice,
             },
+            Name: {
+                contains: search,
+                mode: "insensitive" as const,
+            }
         },
     });
 
@@ -38,6 +45,10 @@ export default async function Products({
             price: {
                 lte: safePrice,
             },
+            Name: {
+                contains: search,
+                mode: "insensitive" as const,
+            }
         },
         select: {
             Name: true,
@@ -54,32 +65,32 @@ export default async function Products({
     return (
         <div className="bg-neutral-50 min-h-screen px-20 py-10">
             <main>
+                <Search />
                 <div className="flex justify-between items-center">
                     <Filter />
                     <p className="text-5xl">Products</p>
                 </div>
 
-                {products ?
-                    <div><div className="flex justify-center items-center flex-wrap gap-6 cursor-pointer py-10">
-                        {products.map((product) => (
-                            <div key={product.slug}> 
-                                <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
-                                    <img src={product.prodImage} alt={product.Name}/>
-                                    <div className=" overflow-auto">
-                                        <p className="text-sm font-bold text-center">
-                                            {product.Name.length > 20
-                                                ? product.Name.slice(0, 22) + "..."
-                                                : product.Name}
-                                        </p>
-                                        <div className="flex justify-between items-center p-3 mx-5">
-                                            <p className="font-bold">₹{String(product.price)}</p>
-                                            <Button disabled={!product.inStock}>Add to cart</Button>
+                {products.length > 0 ?
+                    <div>
+                        <div className="flex justify-center items-center flex-wrap gap-6 cursor-pointer py-10">
+                            {products.map((product) => (
+                                <div key={product.slug}>
+                                    <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
+                                        <img src={product.prodImage} alt={product.Name} />
+                                        <div className=" overflow-auto pt-3">
+                                            <p className="text-sm font-bold text-center">
+                                                {product.Name.length > 20 ? product.Name.slice(0, 22) + "..." : product.Name}
+                                            </p>
+                                            <div className="flex justify-between items-center p-3 mx-5">
+                                                <p className="font-bold">₹{String(product.price)}</p>
+                                                <Button disabled={!product.inStock}>Add to cart</Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
 
                         <div className="flex justify-center mt-20">
                             <Link href={`/products?page=${Number(currentpage) - 1}`}>Prev</Link>

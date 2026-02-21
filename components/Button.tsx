@@ -20,7 +20,7 @@ export default function Button({ children, disabled }) {
       <button
         onClick={() => setCount(1)}
         disabled={disabled}
-        className={`text-white py-2 px-6 rounded-2xl ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-black"}`}
+        className={`text-white py-2 px-6 rounded-2xl overflow-hidden ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-black"}`}
       >
         {children}
       </button>
