@@ -93,23 +93,29 @@ export default async function Products({
                         </div>
 
                         <div className="flex justify-center mt-20">
-                            <Link href={`/products?page=${Number(currentpage) - 1}`}>Prev</Link>
+                            {Number(currentpage) > 1 ?
+                                        search ? <Link href={`/products?page=${Number(currentpage) - 1}&search=${search}`}>Prev</Link> :
+                                        <Link href={`/products?page=${Number(currentpage) - 1}`}>Prev</Link> :
+                                        <button disabled>Prev</button>
+                            }
                             {totalpages_array.map((page) => (
                                 <div key={page}>
-                                    <Link
-                                        className="cursor-pointer p-0.5 px-2 m-2 border"
-                                        href={`/products?page=${page}`}
-                                    >
-                                        {page}
-                                    </Link>
+                                    {search ? <Link className="cursor-pointer p-0.5 px-2 m-2 border" href={`/products?page=${page}&search=${search}`}> {page} </Link> 
+                                    :
+                                    <Link className="cursor-pointer p-0.5 px-2 m-2 border" href={`/products?page=${page}`}> {page} </Link>}
                                 </div>
                             ))}
-                            <Link href={`/products?page=${Number(currentpage) + 1}`}>Next</Link>
+                            {totalpages > 1 && Number(currentpage) !== totalpages ?
+                                        search ? <Link href={`/products?page=${Number(currentpage) + 1}&search=${search}`}>Next</Link> :
+                                        <Link href={`/products?page=${Number(currentpage) + 1}`}>Next</Link> :
+                                        <button disabled>Next</button>
+                            }
                         </div>
                     </div>
                     :
-
-                    <div>No products.</div>
+ 
+                    search ? <div className="flex justify-center items-center py-40"><div className="text-lg">No products matching{ " " } <span className="font-bold text-blue-700">{search}</span>.</div></div> 
+                    : <div className="flex justify-center items-center py-40">No products.</div>
 
                 }
             </main>
