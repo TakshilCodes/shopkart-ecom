@@ -81,10 +81,11 @@ export default async function Products({
                     <p className="text-5xl">Products</p>
                 </div>
 
-                {categorys.length > 0 ? <div className="flex justify-center items-center flex-wrap space-x-10 py-5">
+                {categorys.length > 0 ? <div className="flex justify-center items-center flex-wrap space-x-10 py-10">
+                    <Link className="py-2 px-5 border-2 rounded-xl" href={`/products`}>All</Link>
                     {categorys.map((category) => (
                         <div key={category.slug}>
-                            <Link className="py-2 px-5 bg-black text-white rounded-2xl" href={`/products?category=${category.slug}`}>
+                            <Link className="py-3 px-4 border-2  rounded-xl" href={`/products?category=${category.slug}`}>
                                 {category.name}
                             </Link>
                         </div>
