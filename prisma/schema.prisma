@@ -18,10 +18,18 @@ model Users {
   updatedAt DateTime @updatedAt
 }
 
+model category{
+  id String @default(uuid()) @id
+  name String
+  slug String @unique
+  createdAt DateTime @default(now()) 
+  products product[]
+}
+
 model product {
   id String @default(uuid()) @id
-  category String
-  Name String
+  categoryId String
+  name String
   prodImage String
   price Decimal
   Sizes Json?
@@ -31,5 +39,7 @@ model product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([id,Name,prodImage,category,price,Sizes,slug,isPublished,inStock])
+  category category @relation(references: [id], fields: [categoryId], onDelete: Cascade)
+
+  @@index([id,name,prodImage,categoryId,price,Sizes,slug,isPublished,inStock])
 }
