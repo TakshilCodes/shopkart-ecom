@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FullStack E-Commerce (In Progress)
 
-## Getting Started
+A full-stack e-commerce application built using modern web technologies.  
+This project focuses on implementing production-level architecture, clean code practices, and scalable database design.
 
-First, run the development server:
+**Status:** Actively under development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Backend
+- Next.js API Routes / Server Actions
+- Prisma ORM
+- PostgreSQL (Neon)
 
-## Learn More
+### Tooling
+- Git & GitHub
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Objective
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is being built to:
 
-## Deploy on Vercel
+- Implement structured full-stack architecture
+- Design and manage relational database schemas
+- Practice pagination, filtering, and search logic
+- Build authentication and authorization systems
+- Integrate payment workflows
+- Maintain clean folder structure and modular code
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Current Features
+
+- Product schema with Prisma
+- Product listing page
+- Server-side pagination
+- Search functionality
+- Price filtering
+- Dynamic product pages using slug
+- Database integration with PostgreSQL
+
+---
+
+## In Progress
+
+- Product detail page refinement
+- Add to cart functionality
+- Cart state management
+- Authentication system
+- Admin dashboard (product management)
+- Image handling (Cloudinary integration)
+- Order management system
+- Payment integration
+
+---
+
+## Environment Setup
+
+Create a `.env` file in the root directory:
+
+DATABASE_URL=your_postgres_connection_string
+
+---
+
+## Local Development
+
+npm install  
+npx prisma generate  
+npx prisma db push  
+npm run dev  
+
+---
+
+## Learning Focus
+
+This project strengthens:
+
+- Server-first rendering patterns
+- Prisma schema management
+- Query optimization
+- Structured Git workflows
+- Scalable application design
+
+---
+
+## Author
+
+Takshil Pandya  
+Diploma in Computer Science & Engineering  
+Full-stack development track
