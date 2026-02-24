@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 
-export default function Button({ children, disabled }) {
+export default function Button({ children, disabled } : {children : any,disabled : any}) {
   const [count, setCount] = useState(0);
 
   if (count >= 1) {
     return (
-      <div className="flex justify-between space-x-5 items-center border py-2 px-3 rounded-2xl cursor-pointer">
-        <button className="text-xl font-bold pr-4 border-r border-gray-500 cursor-pointer" onClick={() => setCount(count + 1)}>+</button>
-        <p>{count}</p>
-        <button className="text-xl font-bold pl-4 border-l border-gray-500 cursor-pointer" onClick={() => setCount(count - 1)}>-</button>
+      <div className="inline-flex items-center h-11 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+        <button className="h-11 w-11 grid place-items-center text-lg font-semibold text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition" onClick={() => setCount(count + 1)}>+</button>
+        <p className="w-12 text-center text-sm font-medium text-gray-900 select-none">{count}</p>
+        <button className="h-11 w-11 grid place-items-center text-lg font-semibold text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition" onClick={() => setCount(count - 1)}>-</button>
       </div>
     );
   }
@@ -20,7 +20,7 @@ export default function Button({ children, disabled }) {
       <button
         onClick={() => setCount(1)}
         disabled={disabled}
-        className={`text-white py-2 px-6 rounded-2xl overflow-hidden ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-black"}`}
+        className={`w-full sm:w-auto inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-black/20 active:scale-[0.98] ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-black text-white hover:bg-gray-900"}`}
       >
         {children}
       </button>
