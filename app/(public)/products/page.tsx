@@ -75,10 +75,10 @@ export default async function Products({ searchParams }: {searchParams?: { [key:
                 </div>
 
                 {categorys.length > 0 ? <div className="flex justify-start 2xl:justify-center items-center flex-nowrap space-x-10 py-10 overflow-x-auto scroll-smooth scrollbar-hide">
-                    <Link className="py-2 px-5 border-2 rounded-xl" href={`/products`}>All</Link>
+                    <Link className="py-2 px-5 border border-gray-300 hover:border-black rounded-xl" href={`/products`}>All</Link>
                     {categorys.map((category) => (
                         <div key={category.slug}>
-                            <Link className="py-3 px-4 border-2  rounded-xl whitespace-nowrap" href={`/products?category=${category.slug}`}>
+                            <Link className="py-3 px-4 border border-gray-300 hover:border-black rounded-xl whitespace-nowrap" href={`/products?category=${category.slug}`}>
                                 {category.name}
                             </Link>
                         </div>

@@ -1,3 +1,4 @@
+import { email, uuid } from "zod";
 
 export default function Home() {
   return (

@@ -8,14 +8,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
+    "@upstash/redis": "^1.36.2",
     "axios": "^1.13.5",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.3.1",
     "next": "16.1.6",
+    "next-auth": "^4.24.13",
     "pg": "^8.18.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "redis": "^5.11.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

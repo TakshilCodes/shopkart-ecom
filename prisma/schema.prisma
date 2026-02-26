@@ -8,12 +8,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role{
+  User
+  Admin
+}
+
 model Users {
   id String @default(uuid()) @id
+  role Role
   DisplayName String?
   username String @unique
   email String @unique
-  Hashpassword String
+  Hashpassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -23,7 +23,7 @@ export default function Search() {
         <div className="flex justify-center pb-20">
             <div className="border rounded-4xl mx-auto w-100 flex justify-between items-center px-2">
                 <input type="text" onChange={(e) => setSearch(e.target.value)} className="outline-none w-full text-lg" />
-                <img src={searchImg.src} alt="search" className="w-5 h-5"/>
+                <img src={searchImg.src} alt="search" className="w-5 h-5 m-2"/>
             </div>
         </div>
     )
