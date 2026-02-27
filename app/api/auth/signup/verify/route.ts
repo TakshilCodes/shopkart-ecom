@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 type UserData = {
     email: string,
     displayName: string,
-    passwordHash: string,
+    hashPassword: string,
     otpHash: string
 }
 
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
                 data: {
                     DisplayName: user.displayName!,
                     email: user.email!,
-                    Hashpassword: user.passwordHash,
+                    Hashpassword: user.hashPassword,
                     role: 'User'
                 }
             })

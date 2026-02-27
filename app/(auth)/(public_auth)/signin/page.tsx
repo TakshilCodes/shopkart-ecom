@@ -1,30 +1,25 @@
 "use client"
-import { SignupZod } from "@/lib/validators/auth";
+import { SignInZod } from "@/lib/validators/auth";
 import { useState } from "react";
-import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
 
 type SignupForm = {
     email?: string,
-    displayName?: string,
     password?: string
 }
 
-export default function Signup() {
+export default function SignIn() {
 
     const [data, setData] = useState<SignupForm>({
         email: '',
-        displayName: '',
         password: ''
     })
 
     const [zodError, setZodError] = useState<SignupForm>({
         email: '',
-        displayName: '',
         password: ''
     })
 
@@ -42,31 +37,40 @@ export default function Signup() {
             setZodError({})
             setError('')
 
-            const valid = SignupZod.safeParse(data)
+            const valid = SignInZod.safeParse(data)
 
             if (!valid.success) {
                 const err = valid.error.flatten().fieldErrors
-                setZodError({ email: err.email?.[0], displayName: err.displayName?.[0], password: err.password?.[0] })
+                setZodError({ email: err.email?.[0], password: err.password?.[0] })
                 return setLoading(false)
             }
 
-            const res = await axios.post('/api/auth/signup/init', {
-                displayName: valid.data?.displayName,
-                email: valid.data?.email,
-                password: valid.data?.password
-            })
+            const email = data.email
+            const password = data.password
 
-            if (!res.data.ok) {
-                setError(res.data.error)
-                return setLoading(false)
+            const res = await signIn("credentials", {
+                email,
+                password,
+                redirect: false
+            });
+
+            if (!res) {
+                setError("Something went wrong. Try again.");
+                return;
             }
 
-            router.push(`/signup/verify?verify=${data.email}`)
+            if (res?.error) {
+                setError("Invalid email or password");
+                setLoading(false);
+                return;
+            }
+
+            router.push(`/`)
             return setLoading(false)
 
-        }catch(e : any){
+        } catch (e: any) {
             setLoading(false)
-            return setError(e?.response.data || 'something went wrong!')
+            return setError('Something went wrong!')
         }
     }
 
@@ -75,22 +79,10 @@ export default function Signup() {
 
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
-                <h1 className="text-3xl font-bold text-center text-neutral-800">Create Account</h1>
-                <p className="text-center text-sm text-neutral-500 mt-2">Join ShopKart and step into style 👟</p>
-                {error ? <div>{error}</div> : null}
+                <h1 className="text-3xl font-bold text-center text-neutral-800">Sign In</h1>
+                {error ? <div className="text-red-600 mt-3">{error}</div> : null}
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-                    <div className="flex flex-col space-y-2">
-                        <label className="text-sm font-medium text-neutral-700">Display Name</label>
-                        {zodError?.displayName ? <div className="text-red-600">{zodError.displayName}</div> : null}
-                        <input
-                            type="text"
-                            placeholder="Enter your name"
-                            className="px-4 py-3 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
-                            onChange={(e) => setData((prev) => ({ ...prev, displayName: e.target.value }))}
-                            required
-                        />
-                    </div>
 
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-medium text-neutral-700">Email</label>
@@ -120,7 +112,7 @@ export default function Signup() {
                         {loading ? <ClipLoader color={"#fff"} loading={loading} /> : "Sign up"}
                     </button>
 
-                    <p className="text-sm text-center text-neutral-500">Already have an account?{" "}<Link href={`/signin`} className="text-black font-medium cursor-pointer hover:underline">Sign In</Link></p>
+                    <p className="text-sm text-center text-neutral-500">Don't have an account?{" "}<Link href={`/signup`} className="text-black font-medium cursor-pointer hover:underline">Sign Up</Link></p>
                 </form>
             </div>
         </div>
