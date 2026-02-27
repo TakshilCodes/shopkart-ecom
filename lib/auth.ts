@@ -88,7 +88,6 @@ export const authOptions: NextAuthOptions = {
                     return prisma.users.create({
                         data: {
                             email,
-                            username: uname,
                             DisplayName: uname,
                             role: "User"
                         },

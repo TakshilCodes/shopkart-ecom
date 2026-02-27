@@ -57,7 +57,10 @@ export default function Signup() {
                 setError(res.data.error)
                 return setLoading(false)
             }
+
+            router.push(`/signup/verify?verify=${data.email}`)
             return setLoading(false)
+
         }catch(e : any){
             setLoading(false)
             return setError(e?.response.data)
