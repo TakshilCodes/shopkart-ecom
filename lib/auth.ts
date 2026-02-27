@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
                 },
             });
 
-            if (existing) return false;
+            if (existing) return true;
 
             if (!existing) {
                 const emailLocal = (email.split("@")[0] || "user")
