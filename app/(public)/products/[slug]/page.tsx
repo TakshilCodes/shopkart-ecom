@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import ArrowLeft from '@/assets/icons/left-arrow.png'
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export default async function ProductDetail({ searchParams, params }: { params: any, searchParams?: { [key: string]: string }; }) {
 
@@ -12,11 +14,30 @@ export default async function ProductDetail({ searchParams, params }: { params: 
 
     const currSize = query?.size;
 
+    const session = await getServerSession(authOptions)
+    const user = session?.user.id
+
+    const Selectcart = user ? { cart: { where: { userId: user }, select: { quantity: true } } } : {}
+
     const product = await prisma.product.findUnique({
         where: {
-            slug: slug
+            slug,
+        },
+        select: {
+            id: true,
+            categoryId: true,
+            name: true,
+            prodImage: true,
+            price: true,
+            Sizes: true,
+            isPublished: true,
+            inStock: true,
+            slug: true,
+            ...Selectcart,
         }
-    })
+    });
+
+    const initialquantity = user ? product?.cart[0]?.quantity ?? 0 : 0
 
     const category = await prisma.category.findFirst({
         where: {
@@ -33,7 +54,7 @@ export default async function ProductDetail({ searchParams, params }: { params: 
             {product ? (
                 <div>
                     <div className="flex items-center gap-3 text-sm text-gray-600 mb-6">
-                        <Link href={`/products`} className="p-2 rounded-full hover:bg-gray-100 transition"><img src={ArrowLeft.src} alt="Back" className="w-5 h-5 object-contain"/></Link>
+                        <Link href={`/products`} className="p-2 rounded-full hover:bg-gray-100 transition"><img src={ArrowLeft.src} alt="Back" className="w-5 h-5 object-contain" /></Link>
                         <div className="font-medium text-gray-700">{category?.name}</div>
                         <div className="text-gray-400">|</div>
                         <div className="text-gray-900 font-medium truncate">{product.name}</div>
@@ -77,7 +98,10 @@ export default async function ProductDetail({ searchParams, params }: { params: 
                             </div>
 
                             <div className="pt-4">
-                                {product.inStock ? (<Button disabled={false}>Add to cart</Button>) : (<Button disabled={true}>Add to cart</Button>)}
+                                {product.inStock ?
+                                    currSize ? <Button productId={product.id} disabled={false} initialquantity={initialquantity}>Add to cart</Button>
+                                        : <Button productId={product.id} disabled={true} initialquantity={initialquantity}>Add to cart</Button>
+                                    : <Button productId={product.id} disabled={true} initialquantity={initialquantity}>Add to cart</Button>}
                             </div>
                         </div>
                     </div>

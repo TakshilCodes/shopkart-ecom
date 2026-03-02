@@ -210,7 +210,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/signup"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() => setMenuOpen(false)} 
                         className="flex-1 text-center px-3 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-neutral-800 transition"
                       >
                         Signup

@@ -21,6 +21,8 @@ model Users {
   Hashpassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  cart cart[]
 }
 
 model category{
@@ -45,6 +47,20 @@ model product {
   updatedAt DateTime @updatedAt
 
   category category @relation(references: [id], fields: [categoryId], onDelete: Cascade)
+  cart cart[]
 
   @@index([id,name,prodImage,categoryId,price,Sizes,slug,isPublished,inStock])
+}
+
+model cart {
+  id String @default(uuid()) @id
+  userId String
+  productId String
+  quantity Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId, productId])
+
+  product product @relation(references: [id], fields: [productId], onDelete: Cascade)
+  user Users @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

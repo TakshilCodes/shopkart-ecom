@@ -1,10 +1,12 @@
 import Button from "@/components/Button";
 import Filter from "@/components/Filter";
 import Search from "@/components/Search";
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
-export default async function Products({ searchParams }: {searchParams?: { [key: string]: string};}) {
+export default async function Products({ searchParams }: { searchParams?: { [key: string]: string }; }) {
 
     const params = await searchParams;
     const currentpage = params?.page ?? 1;
@@ -46,9 +48,15 @@ export default async function Products({ searchParams }: {searchParams?: { [key:
 
     const totalpages_array = Array.from({ length: totalpages }, (_, i) => i + 1);
 
+    const session = await getServerSession(authOptions)
+    const user = session?.user.id
+
+    const Selectcart = user ? { cart: { where: { userId: user }, select: { quantity: true } } } : {}
+
     const products = await prisma.product.findMany({
         where,
         select: {
+            id: true,
             name: true,
             prodImage: true,
             price: true,
@@ -59,7 +67,8 @@ export default async function Products({ searchParams }: {searchParams?: { [key:
                 select: {
                     name: true
                 }
-            }
+            },
+            ...Selectcart,
         },
         skip: toSkipItems,
         take: 25
@@ -88,22 +97,25 @@ export default async function Products({ searchParams }: {searchParams?: { [key:
                 {products.length > 0 ?
                     <div>
                         <div className="flex justify-center items-center flex-wrap gap-6 cursor-pointer py-10">
-                            {products.map((product) => (
-                                <div key={product.slug}>
-                                    <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
-                                        <Link href={`/products/${product.slug}`}><img src={product.prodImage} alt={product.name} /></Link>
-                                        <div className=" overflow-auto pt-3">
-                                            <Link href={`/products/${product.slug}`} className="text-sm font-bold text-center">
-                                                {product.name.length > 20 ? product.name.slice(0, 22) + "..." : product.name}
-                                            </Link>
-                                            <div className="flex justify-between items-center p-3 mx-5">
-                                                <Link href={`/products/${product.slug}`} className="font-bold">₹{String(product.price)}</Link>
-                                                <Button disabled={!product.inStock}>Add to cart</Button>
+                            {products.map((product) => {
+                                const initialquantity = user ? product.cart[0]?.quantity ?? 0 : 0
+                                return (
+                                    <div key={product.slug}>
+                                        <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
+                                            <Link href={`/products/${product.slug}`}><img src={product.prodImage} alt={product.name} /></Link>
+                                            <div className=" overflow-auto pt-3">
+                                                <Link href={`/products/${product.slug}`} className="text-sm font-bold text-center">
+                                                    {product.name.length > 20 ? product.name.slice(0, 22) + "..." : product.name}
+                                                </Link>
+                                                <div className="flex justify-between items-center p-3 mx-5">
+                                                    <Link href={`/products/${product.slug}`} className="font-bold">₹{String(product.price)}</Link>
+                                                    <Button productId={product.id} disabled={!product.inStock} initialquantity={initialquantity}>Add to cart</Button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
 
                         <div className="flex justify-center mt-20">
@@ -117,28 +129,13 @@ export default async function Products({ searchParams }: {searchParams?: { [key:
                                     {search
                                         ? hasCategory
                                             ? (
-                                                <Link
-                                                    className="cursor-pointer p-0.5 px-2 m-2 border"
-                                                    href={`/products?page=${page}&search=${search}&category=${rawCategory}`}
-                                                >
-                                                    {page}
-                                                </Link>
+                                                <Link className="cursor-pointer p-0.5 px-2 m-2 border" href={`/products?page=${page}&search=${search}&category=${rawCategory}`}>{page}</Link>
                                             )
                                             : (
-                                                <Link
-                                                    className="cursor-pointer p-0.5 px-2 m-2 border"
-                                                    href={`/products?page=${page}&search=${search}`}
-                                                >
-                                                    {page}
-                                                </Link>
+                                                <Link className="cursor-pointer p-0.5 px-2 m-2 border" href={`/products?page=${page}&search=${search}`}>{page}</Link>
                                             )
                                         : (
-                                            <Link
-                                                className="cursor-pointer p-0.5 px-2 m-2 border"
-                                                href={`/products?page=${page}${hasCategory ? `&category=${rawCategory}` : ""}`}
-                                            >
-                                                {page}
-                                            </Link>
+                                            <Link className="cursor-pointer p-0.5 px-2 m-2 border" href={`/products?page=${page}${hasCategory ? `&category=${rawCategory}` : ""}`}>{page}</Link>
                                         )
                                     }
                                 </div>
