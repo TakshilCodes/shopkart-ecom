@@ -109,7 +109,7 @@ export default async function Products({ searchParams }: { searchParams?: { [key
                                                 </Link>
                                                 <div className="flex justify-between items-center p-3 mx-5">
                                                     <Link href={`/products/${product.slug}`} className="font-bold">₹{String(product.price)}</Link>
-                                                    {product.productvariant.length > 0 ? (
+                                                    {product._count.productvariant > 0 ? (
                                                         <Link href={`/products/${product.slug}`} className="inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium transition 
                                                         focus:outline-none focus:ring-2 focus:ring-black/20 active:scale-[0.98] bg-black text-white hover:bg-gray-900">Select a Size</Link>
                                                     ) : (

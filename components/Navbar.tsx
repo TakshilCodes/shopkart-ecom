@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import arrowdown from "@/assets/icons/down-arrow.png";
+import cart from '@/assets/icons/cart.png'
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const CATEGORIES = [
   { label: "Shoes", href: "/products?category=shoes" },
@@ -13,13 +15,14 @@ const CATEGORIES = [
 ];
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user;
 
   const [catOpen, setCatOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0)
 
   const catRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +45,38 @@ export default function Navbar() {
       document.removeEventListener("mousedown", onDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setCartCount(0);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadCartCount() {
+      try {
+        const res = await fetch("/api/cart/count", { cache: "no-store" });
+        const data = await res.json();
+        if (!cancelled) setCartCount(data?.count ?? 0);
+      } catch {
+        if (!cancelled) setCartCount(0);
+      }
+    }
+
+    loadCartCount();
+
+    function onCartUpdated() {
+      loadCartCount();
+    }
+
+    window.addEventListener("cart:updated", onCartUpdated);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("cart:updated", onCartUpdated);
+    };
+  }, [status]);
 
   return (
     <header className="w-full border-b border-neutral-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
@@ -210,7 +245,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/signup"
-                        onClick={() => setMenuOpen(false)} 
+                        onClick={() => setMenuOpen(false)}
                         className="flex-1 text-center px-3 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-neutral-800 transition"
                       >
                         Signup
@@ -258,84 +293,102 @@ export default function Navbar() {
                 </Link>
               </>
             ) : (
-              <div className="relative" ref={profileRef}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileOpen((v) => !v);
-                    setCatOpen(false);
-                    setMenuOpen(false);
-                    setMobileCatOpen(false);
-                  }}
-                  className="flex items-center gap-2 rounded-full hover:bg-neutral-100 px-2 py-1 transition"
+              <>
+                <Link
+                  href="/cart"
+                  className="relative inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-neutral-100 transition"
                 >
-                  <div className="h-9 w-9 rounded-full overflow-hidden border border-neutral-200 bg-neutral-100 flex items-center justify-center">
-                    {user.image ? (
-                      <img
-                        src={user.image}
-                        alt="Profile"
-                        width={36}
-                        height={36}
-                        className="h-9 w-9 object-cover"
-                      />
-                    ) : (
-                      <span className="text-sm font-semibold text-neutral-700">
-                        {(user.name?.[0] || user.email?.[0] || "U").toUpperCase()}
-                      </span>
-                    )}
-                  </div>
+                  <img
+                    src={cart.src}
+                    alt="cart"
+                    className="h-6 w-6 object-contain"
+                  />
 
-                  <div className="hidden sm:flex flex-col items-start leading-tight">
-                    <span className="text-xs text-neutral-500">Signed in</span>
-                    <span className="text-sm font-medium text-neutral-900 max-w-35 truncate">
-                      {user.name || user.email}
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-4.5 h-4.5 px-1 text-[10px] font-semibold rounded-full bg-black text-white">
+                      {cartCount}
                     </span>
-                  </div>
-
-                  <span className={`transition ${profileOpen ? "rotate-180" : ""}`}>
-                    <img
-                      src={arrowdown.src}
-                      alt="Down"
-                      width={16}
-                      height={16}
-                      className="h-4 w-4 object-contain"
-                    />
-                  </span>
-                </button>
-
-                {profileOpen && (
-                  <div className="absolute right-0 top-full mt-3 w-56 rounded-xl border border-neutral-200 bg-white shadow-lg overflow-hidden">
-                    <div className="px-4 py-3">
-                      <div className="text-sm font-semibold text-neutral-900 truncate">
-                        {user.name || "Account"}
-                      </div>
-                      <div className="text-xs text-neutral-500 truncate">
-                        {user.email}
-                      </div>
+                  )}
+                </Link>
+                <div className="relative" ref={profileRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileOpen((v) => !v);
+                      setCatOpen(false);
+                      setMenuOpen(false);
+                      setMobileCatOpen(false);
+                    }}
+                    className="flex items-center gap-2 rounded-full hover:bg-neutral-100 px-2 py-1 transition"
+                  >
+                    <div className="h-9 w-9 rounded-full overflow-hidden border border-neutral-200 bg-neutral-100 flex items-center justify-center">
+                      {user.image ? (
+                        <img
+                          src={user.image}
+                          alt="Profile"
+                          width={36}
+                          height={36}
+                          className="h-9 w-9 object-cover"
+                        />
+                      ) : (
+                        <span className="text-sm font-semibold text-neutral-700">
+                          {(user.name?.[0] || user.email?.[0] || "U").toUpperCase()}
+                        </span>
+                      )}
                     </div>
 
-                    <div className="h-px bg-neutral-200" />
-
-                    <div className="py-2">
-                      <Link
-                        href="/account"
-                        onClick={() => setProfileOpen(false)}
-                        className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
-                      >
-                        Account
-                      </Link>
-
-                      <button
-                        type="button"
-                        onClick={() => signOut({ callbackUrl: "/" })}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
-                      >
-                        Logout
-                      </button>
+                    <div className="hidden sm:flex flex-col items-start leading-tight">
+                      <span className="text-xs text-neutral-500">Signed in</span>
+                      <span className="text-sm font-medium text-neutral-900 max-w-35 truncate">
+                        {user.name || user.email}
+                      </span>
                     </div>
-                  </div>
-                )}
-              </div>
+
+                    <span className={`transition ${profileOpen ? "rotate-180" : ""}`}>
+                      <img
+                        src={arrowdown.src}
+                        alt="Down"
+                        width={16}
+                        height={16}
+                        className="h-4 w-4 object-contain"
+                      />
+                    </span>
+                  </button>
+
+                  {profileOpen && (
+                    <div className="absolute right-0 top-full mt-3 w-56 rounded-xl border border-neutral-200 bg-white shadow-lg overflow-hidden">
+                      <div className="px-4 py-3">
+                        <div className="text-sm font-semibold text-neutral-900 truncate">
+                          {user.name || "Account"}
+                        </div>
+                        <div className="text-xs text-neutral-500 truncate">
+                          {user.email}
+                        </div>
+                      </div>
+
+                      <div className="h-px bg-neutral-200" />
+
+                      <div className="py-2">
+                        <Link
+                          href="/account"
+                          onClick={() => setProfileOpen(false)}
+                          className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
+                        >
+                          Account
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => signOut({ callbackUrl: "/" })}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>
