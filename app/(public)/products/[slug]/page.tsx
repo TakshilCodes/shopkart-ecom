@@ -2,7 +2,6 @@ import Button from "@/components/Button";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import ArrowLeft from '@/assets/icons/left-arrow.png'
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -17,8 +16,6 @@ export default async function ProductDetail({ searchParams, params }: { params: 
     const session = await getServerSession(authOptions)
     const user = session?.user.id
 
-    const Selectcart = user ? { cart: { where: { userId: user }, select: { quantity: true } } } : {}
-
     const product = await prisma.product.findUnique({
         where: {
             slug,
@@ -29,15 +26,45 @@ export default async function ProductDetail({ searchParams, params }: { params: 
             name: true,
             prodImage: true,
             price: true,
-            Sizes: true,
+            productvariant: {
+                select: {
+                    id: true,
+                    size: true,
+                    stockQuantity: true
+                }
+            },
             isPublished: true,
-            inStock: true,
             slug: true,
-            ...Selectcart,
         }
     });
 
-    const initialquantity = user ? product?.cart[0]?.quantity ?? 0 : 0
+    if(!product){
+        return <div className="text-center py-20 text-gray-500">
+                    Product not found
+                </div>
+    }
+
+    const selectedVariant = currSize
+        ? await prisma.productVariant.findFirst({
+            where: {
+                productId: product?.id,
+                size: currSize,
+            },
+        })
+        : null;
+
+    let cart = null;
+
+    if (selectedVariant && user) {
+        cart = await prisma.cart.findUnique({
+            where: {
+                userId_productVariantId: {
+                    userId: user,
+                    productVariantId: selectedVariant.id,
+                },
+            },
+        });
+    }
 
     const category = await prisma.category.findFirst({
         where: {
@@ -47,11 +74,12 @@ export default async function ProductDetail({ searchParams, params }: { params: 
             name: true
         }
     })
-    const sizes = product?.Sizes
+
+    const initialQuantity = cart?.quantity ?? 0;
+    const canAdd = !!selectedVariant && selectedVariant.stockQuantity > 0;
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-10">
-            {product ? (
                 <div>
                     <div className="flex items-center gap-3 text-sm text-gray-600 mb-6">
                         <Link href={`/products`} className="p-2 rounded-full hover:bg-gray-100 transition"><img src={ArrowLeft.src} alt="Back" className="w-5 h-5 object-contain" /></Link>
@@ -75,18 +103,26 @@ export default async function ProductDetail({ searchParams, params }: { params: 
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <p className="font-medium">Size</p>
-                                    <p className={`text-sm ${product.inStock ? "text-green-600" : "text-red-500"}`}>{product.inStock ? "In Stock" : "Not in stock"}</p>
+                                    {currSize ? (product.productvariant.length >= 1 ? (
+                                        product.productvariant.map((size) =>
+                                            size.size === currSize ? (
+                                                <div key={size.id} className="text-green-600">In stock:{size.stockQuantity}</div>
+                                            ) : null
+                                        )) : (
+                                        <div className="text-sm text-gray-500">No stock</div>))
+                                        : (<div className="text-sm text-gray-500">Select a size</div>)
+                                    }
                                 </div>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {Array.isArray(sizes) ? (
-                                        sizes.map((size) => (
+                                    {product.productvariant.length >= 1 ? (
+                                        product.productvariant.map((size) => (
                                             <Link
-                                                key={String(size)}
-                                                href={`/products/${slug}?size=${size}`}
-                                                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${currSize && currSize == size ? "bg-black text-white" : "border border-gray-300 hover:border-black"}`}
+                                                key={String(size.size)}
+                                                href={`/products/${slug}?size=${size.size}`}
+                                                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${currSize && currSize == size.size ? "bg-black text-white" : "border border-gray-300 hover:border-black"}`}
                                             >
-                                                {String(size)}
+                                                {size.size}
                                             </Link>
                                         ))
                                     ) : (
@@ -95,22 +131,29 @@ export default async function ProductDetail({ searchParams, params }: { params: 
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                                <div>
+                                    <div>
+                                        <Button
+                                            disabled={!canAdd}
+                                            initialquantity={initialQuantity}
+                                            productvariantId={selectedVariant?.id}
+                                            max={selectedVariant?.stockQuantity}
+                                        >
+                                            Add to cart
+                                        </Button>
 
-                            <div className="pt-4">
-                                {product.inStock ?
-                                    currSize ? <Button productId={product.id} disabled={false} initialquantity={initialquantity}>Add to cart</Button>
-                                        : <Button productId={product.id} disabled={true} initialquantity={initialquantity}>Add to cart</Button>
-                                    : <Button productId={product.id} disabled={true} initialquantity={initialquantity}>Add to cart</Button>}
+                                        {!currSize && (
+                                            <p className="text-sm text-gray-500 mt-2">Please select a size</p>
+                                        )}
+                                        {currSize && selectedVariant && selectedVariant.stockQuantity <= 0 && (
+                                            <p className="text-sm text-red-500 mt-2">Selected size is out of stock</p>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            ) : (
-                <div className="text-center py-20 text-gray-500">
-                    Product not found
-                </div>
-            )}
         </div>
     )
 }

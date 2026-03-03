@@ -15,7 +15,7 @@ enum Role{
 
 model Users {
   id String @default(uuid()) @id
-  role Role
+  role Role @default(User)
   DisplayName String?
   email String @unique
   Hashpassword String?
@@ -39,28 +39,41 @@ model product {
   name String
   prodImage String
   price Decimal
-  Sizes Json?
   slug String @unique
   isPublished Boolean @default(true)
-  inStock Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   category category @relation(references: [id], fields: [categoryId], onDelete: Cascade)
-  cart cart[]
+  productvariant ProductVariant[]
 
-  @@index([id,name,prodImage,categoryId,price,Sizes,slug,isPublished,inStock])
+  @@index([id,name,prodImage,categoryId,price,slug,isPublished])
+}
+model ProductVariant{
+  id String @default(uuid()) @id
+  productId String
+  size String
+  stockQuantity Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart cart[]
+  product product @relation(references: [id], fields: [productId], onDelete: Cascade) 
+  @@unique([productId, size])
+  @@index([productId])
 }
 
 model cart {
   id String @default(uuid()) @id
   userId String
-  productId String
+  productVariantId String
   quantity Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@unique([userId, productId])
+  @@unique([userId, productVariantId])
 
-  product product @relation(references: [id], fields: [productId], onDelete: Cascade)
+  @@index([userId])
+
   user Users @relation(references: [id], fields: [userId], onDelete: Cascade)
+  productvariant ProductVariant @relation(references: [id], fields: [productVariantId], onDelete: Cascade)
 }

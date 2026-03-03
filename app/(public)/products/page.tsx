@@ -51,8 +51,6 @@ export default async function Products({ searchParams }: { searchParams?: { [key
     const session = await getServerSession(authOptions)
     const user = session?.user.id
 
-    const Selectcart = user ? { cart: { where: { userId: user }, select: { quantity: true } } } : {}
-
     const products = await prisma.product.findMany({
         where,
         select: {
@@ -61,14 +59,17 @@ export default async function Products({ searchParams }: { searchParams?: { [key
             prodImage: true,
             price: true,
             isPublished: true,
-            inStock: true,
             slug: true,
             category: {
                 select: {
                     name: true
                 }
             },
-            ...Selectcart,
+            _count:{
+                select:{
+                    productvariant:true
+                }
+            }
         },
         skip: toSkipItems,
         take: 25
@@ -98,7 +99,6 @@ export default async function Products({ searchParams }: { searchParams?: { [key
                     <div>
                         <div className="flex justify-center items-center flex-wrap gap-6 cursor-pointer py-10">
                             {products.map((product) => {
-                                const initialquantity = user ? product.cart[0]?.quantity ?? 0 : 0
                                 return (
                                     <div key={product.slug}>
                                         <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
@@ -109,7 +109,14 @@ export default async function Products({ searchParams }: { searchParams?: { [key
                                                 </Link>
                                                 <div className="flex justify-between items-center p-3 mx-5">
                                                     <Link href={`/products/${product.slug}`} className="font-bold">₹{String(product.price)}</Link>
-                                                    <Button productId={product.id} disabled={!product.inStock} initialquantity={initialquantity}>Add to cart</Button>
+                                                    {product.productvariant.length > 0 ? (
+                                                        <Link href={`/products/${product.slug}`} className="inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium transition 
+                                                        focus:outline-none focus:ring-2 focus:ring-black/20 active:scale-[0.98] bg-black text-white hover:bg-gray-900">Select a Size</Link>
+                                                    ) : (
+                                                        <button disabled className="inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium bg-gray-300 cursor-not-allowed">
+                                                            Unavailable
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
