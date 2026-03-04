@@ -8,10 +8,14 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 const CATEGORIES = [
-  { label: "Shoes", href: "/products?category=shoes" },
-  { label: "Clothing", href: "/products?category=clothing" },
-  { label: "Watches", href: "/products?category=watches" },
-  { label: "Accessories", href: "/products?category=accessories" },
+  { label: "Sneakers", href: "/products?category=sneakers" },
+  { label: "Football", href: "/products?category=football" },
+  { label: "Cricket", href: "/products?category=cricket" },
+  { label: "Tennis", href: "/products?category=tennis" },
+  { label: "Puma Nitro Collection", href: "/products?category=puma-nitro-collection" },
+  { label: "Adidas Originals", href: "/products?category=adidas-originals" },
+  { label: "Running", href: "/products?category=running" },
+  { label: "Sportswear", href: "/products?category=sportswear" }
 ];
 
 export default function Navbar() {
@@ -295,7 +299,7 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/cart"
+                  href="/"
                   className="relative inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-neutral-100 transition"
                 >
                   <img
