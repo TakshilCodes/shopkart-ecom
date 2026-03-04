@@ -49,6 +49,7 @@ model product {
 
   @@index([id,name,prodImage,categoryId,price,slug,isPublished])
 }
+
 model ProductVariant{
   id String @default(uuid()) @id
   productId String

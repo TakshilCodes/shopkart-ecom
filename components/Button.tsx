@@ -1,11 +1,13 @@
 "use client";
 
 import { decrementCartItem, incrementCartItem } from "@/actions/action.cart";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Button({ children, disabled, productvariantId, initialquantity, max }: { children: string, disabled: boolean, productvariantId?: string, initialquantity?: number, max?: number }) {
+export default function Button({ children, disabled, productvariantId, initialquantity, max, isCart }: { children?: string, disabled: boolean, productvariantId?: string, initialquantity?: number, max?: number, isCart?: boolean }) {
 
   const [count, setCount] = useState(initialquantity ?? 0);
+  const router = useRouter()
 
   useEffect(() => {
     setCount(initialquantity ?? 0);
@@ -20,6 +22,7 @@ export default function Button({ children, disabled, productvariantId, initialqu
     setCount((c) => c + 1);
     const res = await incrementCartItem(productvariantId);
     if (res?.ok) window.dispatchEvent(new Event("cart:updated"));
+    if(isCart) router.refresh()
   }
 
   async function handleDecrement() {
@@ -30,6 +33,7 @@ export default function Button({ children, disabled, productvariantId, initialqu
     const res = await decrementCartItem(productvariantId, current);
 
     if (res?.ok) window.dispatchEvent(new Event("cart:updated"))
+      if(isCart) router.refresh()
   }
 
   if (count >= 1) {
