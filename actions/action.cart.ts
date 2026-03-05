@@ -76,3 +76,21 @@ export async function decrementCartItem(productVariantId: string, currentQuantit
         return { ok: false, error: "Something went wrong" }
     }
 }
+
+export async function deleteCartItem(formData: FormData) {
+  const cartId = formData.get("cartId") as string;
+
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+
+  if (!userId || !cartId) return;
+
+  await prisma.cart.deleteMany({
+    where: {
+      id: cartId,
+      userId: userId,
+    },
+  });
+
+  redirect('/cart')
+}
