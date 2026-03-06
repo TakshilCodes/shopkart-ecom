@@ -23,6 +23,7 @@ model Users {
   updatedAt DateTime @updatedAt
 
   cart cart[]
+  address Address[]
 }
 
 model category{
@@ -77,4 +78,22 @@ model cart {
 
   user Users @relation(references: [id], fields: [userId], onDelete: Cascade)
   productvariant ProductVariant @relation(references: [id], fields: [productVariantId], onDelete: Cascade)
+}
+
+model Address{
+  id String @default(uuid()) @id
+  isDefault Boolean @default(false)
+  phoneNumber String
+  userId String
+  fullName String
+  Country String
+  AddressLine1 String
+  AddressLine2 String?
+  City String
+  State String
+  pincode String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user Users @relation(references: [id], fields: [userId], onDelete: Cascade) 
 }
