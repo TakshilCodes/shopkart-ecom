@@ -89,6 +89,8 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
     addresses[0] ||
     null;
 
+  const hasAddress = !!selectedAddress;
+
   const validCartItems =
     user.cart?.filter(
       (item) =>
@@ -104,7 +106,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             href="/cart"
             className="inline-flex items-center text-sm text-gray-600 hover:text-black transition"
           >
-            ← Back to Cart
+            <img src={ArrowLeft.src} alt="Back" className="w-3" /> Back to Cart
           </Link>
 
           <div className="mt-8 bg-white rounded-2xl border border-gray-200 p-10 text-center">
@@ -226,7 +228,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                       No address found. Add an address before placing your order.
                     </p>
                     <Link
-                      href="/account/addresses/new"
+                      href="/address"
                       className="inline-flex items-center justify-center mt-4 h-10 px-4 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition"
                     >
                       Add Address
@@ -329,11 +331,29 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                   </span>
                 </div>
 
-                <PayButton addressId={selectedAddress.id ?? ""} total={total}/>
+                {hasAddress ? (
+                  <>
+                    <PayButton addressId={selectedAddress.id} total={total} />
+                    <p className="text-xs leading-5 text-gray-500 text-center">
+                      Your total is calculated securely on the server before payment.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="rounded-xl border border-dashed border-gray-300 p-4 text-center">
+                      <p className="text-sm text-gray-600">
+                        Add a delivery address before proceeding to payment.
+                      </p>
+                    </div>
 
-                <p className="text-xs leading-5 text-gray-500 text-center">
-                  Your total is calculated securely on the server before payment.
-                </p>
+                    <Link
+                      href="/address"
+                      className="inline-flex w-full items-center justify-center h-11 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition"
+                    >
+                      Add Address
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </aside>

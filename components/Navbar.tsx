@@ -5,7 +5,6 @@ import arrowdown from "@/assets/icons/down-arrow.png";
 import cart from '@/assets/icons/cart.png'
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 
 const CATEGORIES = [
   { label: "Sneakers", href: "/products?category=sneakers" },
@@ -265,6 +264,22 @@ export default function Navbar() {
                         Account
                       </Link>
 
+                      <Link
+                        href="/cart"
+                        onClick={() => setMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-sm text-neutral-800 hover:bg-neutral-100 transition"
+                      >
+                        Cart
+                      </Link>
+
+                      <Link
+                        href="/orders"
+                        onClick={() => setMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-sm text-neutral-800 hover:bg-neutral-100 transition"
+                      >
+                        Your orders
+                      </Link>
+
                       <button
                         type="button"
                         onClick={() => signOut({ callbackUrl: "/" })}
@@ -379,6 +394,14 @@ export default function Navbar() {
                           className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
                         >
                           Account
+                        </Link>
+
+                        <Link
+                          href="/orders"
+                          onClick={() => setProfileOpen(false)}
+                          className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
+                        >
+                          Your orders
                         </Link>
 
                         <button

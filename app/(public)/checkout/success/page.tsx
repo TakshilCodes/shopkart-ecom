@@ -49,10 +49,6 @@ export default async function SuccessPage({
                             Your payment has been processed successfully.
                         </p>
 
-                        <p className="text-gray-500 text-sm mt-2">
-                            Thank you for your order. You will receive confirmation shortly.
-                        </p>
-
                         {/* Buttons */}
                         <div className="mt-8 flex flex-col gap-3">
                             <a

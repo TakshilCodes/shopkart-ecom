@@ -64,6 +64,7 @@ export default function AddressForm() {
         }
 
         setConfirm("Done, your address is added")
+        router.push('/checkout')
         return
     }
 
