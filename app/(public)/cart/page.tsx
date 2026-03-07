@@ -180,10 +180,12 @@ export default async function Cart() {
                         <span>₹{DisplaySubtotal}</span>
                     </div>
 
-                    <button className="w-full bg-black text-white hover: py-3 rounded-xl hover:bg-gray-900 transition">
+                    <Link
+                        href="/checkout"
+                        className="inline-flex w-full items-center justify-center bg-black text-white py-3 rounded-xl hover:bg-gray-900 transition"
+                    >
                         Checkout
-                    </button>
-
+                    </Link>
                 </aside>
 
             </div>
