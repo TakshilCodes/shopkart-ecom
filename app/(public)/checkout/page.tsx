@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import ArrowLeft from '@/assets/icons/left-arrow.png'
+import PayButton from "@/components/PayButton";
 
 type CheckoutPageProps = {
   searchParams?: Promise<{
@@ -145,7 +146,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             href="/cart"
             className="inline-flex items-center text-sm text-gray-600 hover:text-black transition"
           >
-            <img src={ArrowLeft.src} alt="Back" className="w-3"/> Back to Cart
+            <img src={ArrowLeft.src} alt="Back" className="w-3" /> Back to Cart
           </Link>
 
           <h1 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight text-black">
@@ -208,11 +209,10 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                           <Link
                             key={address.id}
                             href={`/checkout?addressId=${address.id}`}
-                            className={`inline-flex items-center rounded-lg border px-3 py-2 text-sm transition ${
-                              selectedAddress.id === address.id
-                                ? "border-black bg-black text-white"
-                                : "border-gray-300 bg-white text-black hover:border-black"
-                            }`}
+                            className={`inline-flex items-center rounded-lg border px-3 py-2 text-sm transition ${selectedAddress.id === address.id
+                              ? "border-black bg-black text-white"
+                              : "border-gray-300 bg-white text-black hover:border-black"
+                              }`}
                           >
                             {address.fullName} • {address.City}
                           </Link>
@@ -329,16 +329,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                   </span>
                 </div>
 
-                <form action="/api/payment/create-order" method="POST">
-                  <input type="hidden" name="addressId" value={selectedAddress?.id ?? ""} />
-                  <button
-                    type="submit"
-                    disabled={!selectedAddress}
-                    className="w-full mt-2 h-12 rounded-xl bg-black text-white font-medium hover:bg-gray-900 transition active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Pay {formatPrice(total)}
-                  </button>
-                </form>
+                <PayButton addressId={selectedAddress.id ?? ""} total={total}/>
 
                 <p className="text-xs leading-5 text-gray-500 text-center">
                   Your total is calculated securely on the server before payment.
