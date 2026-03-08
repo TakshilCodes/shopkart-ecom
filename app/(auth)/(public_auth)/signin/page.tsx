@@ -108,6 +108,15 @@ export default function SignIn() {
                         />
                     </div>
 
+                    <div className="flex items-center justify-end">
+                        <Link
+                            href="/forgot-password"
+                            className="text-sm font-medium text-black hover:underline"
+                        >
+                            Forgot password?
+                        </Link>
+                    </div>
+
                     <button disabled={loading} type="submit" className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-neutral-800 transition duration-200">
                         {loading ? <ClipLoader color={"#fff"} loading={loading} /> : "Sign In"}
                     </button>
