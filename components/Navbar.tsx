@@ -257,11 +257,11 @@ export default function Navbar() {
                   ) : (
                     <div className="px-4 pb-2 space-y-2">
                       <Link
-                        href="/account"
+                        href="/profile"
                         onClick={() => setMenuOpen(false)}
                         className="block px-3 py-2 rounded-lg text-sm text-neutral-800 hover:bg-neutral-100 transition"
                       >
-                        Account
+                        profile
                       </Link>
 
                       <Link
@@ -389,11 +389,11 @@ export default function Navbar() {
 
                       <div className="py-2">
                         <Link
-                          href="/account"
+                          href="/profile"
                           onClick={() => setProfileOpen(false)}
                           className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
                         >
-                          Account
+                          Profile
                         </Link>
 
                         <Link

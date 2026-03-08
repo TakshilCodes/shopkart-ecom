@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
           where: {
             userId: order.userId,
           },
-        });
+        })
       });
     }
 
