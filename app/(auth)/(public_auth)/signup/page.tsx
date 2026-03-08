@@ -116,7 +116,7 @@ export default function Signup() {
                     </div>
 
                     <button disabled={loading} type="submit" className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-neutral-800 transition duration-200">
-                        {loading ? <ClipLoader color={"#fff"} loading={loading} /> : "Sign In"}
+                        {loading ? <ClipLoader color={"#fff"} loading={loading} /> : "Sign Up"}
                     </button>
 
                     <div className="flex items-center my-6">
