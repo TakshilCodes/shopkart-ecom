@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 type DashboardStats = {
     totalOrders: number;
@@ -132,14 +133,15 @@ export default function AdminDashboard() {
                 setDashboardLoading(true);
                 setDashboardError(null);
 
-                const res = await fetch("/api/admin/dashboard", {
-                    method: "GET",
-                    cache: "no-store",
-                });
+                const res = await axios.get('/api/admin/dashboard', {
+                    headers: {
+                        'Cache-Control': 'no-store'
+                    }
+                })
 
-                const data: DashboardResponse = await res.json();
+                const data: DashboardResponse = await res.data;
 
-                if (!res.ok || !data.ok) {
+                if (!res.data.ok || !data.ok) {
                     throw new Error(data.error || "Failed to load dashboard");
                 }
 
@@ -362,9 +364,6 @@ export default function AdminDashboard() {
 
                     <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center">
                         <p className="text-sm font-medium text-zinc-700">Revenue chart goes here later</p>
-                        <p className="mt-1 text-xs text-zinc-500">
-                            Add Recharts or Chart.js when your analytics API is ready
-                        </p>
                     </div>
                 </div>
             </div>
@@ -401,8 +400,8 @@ export default function AdminDashboard() {
 
                                     <span
                                         className={`rounded-full px-2.5 py-1 text-xs font-medium ${product.isPublished
-                                                ? "bg-emerald-100 text-emerald-700"
-                                                : "bg-zinc-100 text-zinc-700"
+                                            ? "bg-emerald-100 text-emerald-700"
+                                            : "bg-zinc-100 text-zinc-700"
                                             }`}
                                     >
                                         {product.isPublished ? "Active" : "Draft"}
@@ -436,8 +435,8 @@ export default function AdminDashboard() {
                                     <div
                                         key={product.id}
                                         className={`flex items-center justify-between rounded-xl p-3 ${isCritical
-                                                ? "border border-red-100 bg-red-50"
-                                                : "border border-amber-100 bg-amber-50"
+                                            ? "border border-red-100 bg-red-50"
+                                            : "border border-amber-100 bg-amber-50"
                                             }`}
                                     >
                                         <div className="min-w-0">
@@ -452,8 +451,8 @@ export default function AdminDashboard() {
 
                                         <span
                                             className={`ml-3 rounded-full px-2.5 py-1 text-xs font-semibold ${isCritical
-                                                    ? "bg-red-100 text-red-700"
-                                                    : "bg-amber-100 text-amber-700"
+                                                ? "bg-red-100 text-red-700"
+                                                : "bg-amber-100 text-amber-700"
                                                 }`}
                                         >
                                             {lowestVariant?.stockQuantity ?? 0} left

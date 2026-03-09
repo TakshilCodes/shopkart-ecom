@@ -45,7 +45,7 @@ model product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  category       category         @relation(references: [id], fields: [categoryId], onDelete: Cascade)
+  category       category         @relation(references: [id], fields: [categoryId])
   productvariant ProductVariant[]
 
   @@index([id, name, prodImage, categoryId, price, slug, isPublished])
