@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
+import AdminSidebar from "@/components/AdminSidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,13 @@ export default function RootLayout({
   return (
     <html>
       <body>
-          {children}
+        <div className="min-h-screen bg-zinc-100 flex">
+          <AdminSidebar />
+
+          <main className="flex-1 p-6">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

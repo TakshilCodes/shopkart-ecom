@@ -6,11 +6,9 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  let admin = true
-
-  if(session?.user.role == 'Admin'){
-    redirect('/admin')
-  }
+  // if(session?.user.role == 'Admin'){
+  //   redirect('/admin')
+  // }
 
   return (
     <div className="flex min-h-screen items-center justify-center">
