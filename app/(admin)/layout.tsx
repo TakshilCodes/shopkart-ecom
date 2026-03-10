@@ -8,10 +8,9 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <div className="min-h-screen bg-zinc-100 flex">
+        <div className="min-h-screen bg-zinc-100 md:flex">
           <AdminSidebar />
-
-          <main className="flex-1 p-6">
+          <main className="min-w-0 flex-1 p-3 pt-16 md:p-6 md:pt-6">
             {children}
           </main>
         </div>

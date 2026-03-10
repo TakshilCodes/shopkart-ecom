@@ -60,7 +60,7 @@ model ProductVariant {
   updatedAt     DateTime @updatedAt
 
   cart    cart[]
-  product product @relation(references: [id], fields: [productId], onDelete: Cascade)
+  product product @relation(references: [id], fields: [productId])
 
   @@unique([productId, size])
   @@index([productId])
