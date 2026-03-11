@@ -94,7 +94,7 @@ export default function Verify() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-white to-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-linear-to-b from-white to-slate-50 flex items-center justify-center px-4 pb-10 pt-45">
       <div className="w-full max-w-md">
         <div className="rounded-2xl bg-white shadow-[0_10px_30px_rgba(2,6,23,0.08)] border border-slate-200">
           <div className="p-6 sm:p-7">

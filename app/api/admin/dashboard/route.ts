@@ -3,7 +3,21 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const [ totalOrders, totalProducts, totalUsers, revenueResult, pendingOrders, outOfStockProducts, recentOrders, recentProducts,lowStockProducts,] = await Promise.all([
+    const [
+      totalOrders,
+      totalProducts,
+      totalUsers,
+      revenueResult,
+      pendingOrders,
+      outOfStockProducts,
+      recentOrders,
+      recentProducts,
+      lowStockProducts,
+      paidRevenueResult,
+      pendingRevenueResult,
+      failedRevenueResult,
+      cancelledRevenueResult,
+    ] = await Promise.all([
       prisma.order.count(),
 
       prisma.product.count(),
@@ -114,11 +128,47 @@ export async function GET() {
           },
         },
       }),
+
+      prisma.order.aggregate({
+        where: {
+          status: "PAID",
+        },
+        _sum: {
+          total: true,
+        },
+      }),
+
+      prisma.order.aggregate({
+        where: {
+          status: "PENDING_PAYMENT",
+        },
+        _sum: {
+          total: true,
+        },
+      }),
+
+      prisma.order.aggregate({
+        where: {
+          status: "FAILED",
+        },
+        _sum: {
+          total: true,
+        },
+      }),
+
+      prisma.order.aggregate({
+        where: {
+          status: "CANCELLED",
+        },
+        _sum: {
+          total: true,
+        },
+      }),
     ]);
 
     const formattedRecentOrders = recentOrders.map((order) => ({
       id: order.id,
-      total: order.total,
+      total: Number(order.total),
       status: order.status,
       createdAt: order.createdAt,
       customerName: order.user.DisplayName,
@@ -133,12 +183,21 @@ export async function GET() {
           totalOrders,
           totalProducts,
           totalUsers,
-          totalRevenue: revenueResult._sum.total ?? 0,
+          totalRevenue: Number(revenueResult._sum.total ?? 0),
           pendingOrders,
           outOfStockProducts,
         },
+        revenueSummary: {
+          paid: Number(paidRevenueResult._sum.total ?? 0),
+          pending: Number(pendingRevenueResult._sum.total ?? 0),
+          failed: Number(failedRevenueResult._sum.total ?? 0),
+          cancelled: Number(cancelledRevenueResult._sum.total ?? 0),
+        },
         recentOrders: formattedRecentOrders,
-        recentProducts,
+        recentProducts: recentProducts.map((product) => ({
+          ...product,
+          price: Number(product.price),
+        })),
         lowStockProducts,
         error: null,
       },
@@ -149,6 +208,7 @@ export async function GET() {
       {
         ok: false,
         stats: null,
+        revenueSummary: null,
         recentOrders: null,
         recentProducts: null,
         lowStockProducts: null,

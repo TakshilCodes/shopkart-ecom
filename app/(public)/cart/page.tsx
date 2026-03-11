@@ -58,7 +58,7 @@ export default async function Cart() {
 
     if (!session) {
         return (
-            <main className="max-w-6xl mx-auto px-6 py-20 flex flex-col items-center text-center">
+            <main className="max-w-6xl mx-auto px-6 pb-10 pt-45 flex flex-col items-center text-center">
                 <h1 className="text-3xl font-semibold mb-4">Your Cart</h1>
 
                 <p className="text-gray-500 mb-6">
@@ -77,7 +77,7 @@ export default async function Cart() {
 
     if (cartItems.length === 0) {
         return (
-            <main className="max-w-6xl mx-auto px-6 py-20 flex flex-col items-center text-center">
+            <main className="max-w-6xl mx-auto px-6 pb-10 pt-45 flex flex-col items-center text-center">
                 <h1 className="text-3xl font-semibold mb-4">Your Cart</h1>
 
                 <p className="text-gray-500 mb-6">
@@ -95,7 +95,7 @@ export default async function Cart() {
     }
 
     return (
-        <main className="max-w-6xl mx-auto px-6 py-10">
+        <main className="max-w-6xl mx-auto px-6 pb-10 pt-45">
             <div className="flex items-center justify-start space-x-5 mb-8">
                 <p className="text-3xl font-semibold">Your Cart</p>
                 <p className="text-gray-500">{TotalCartItems._sum.quantity} items</p>

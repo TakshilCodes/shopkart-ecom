@@ -188,7 +188,7 @@ export default async function OrderDetailsPage({
                   return (
                     <div
                       key={item.id}
-                      className="flex flex-col gap-4 rounded-[24px] border border-black/5 p-4 sm:flex-row sm:items-center"
+                      className="flex flex-col gap-4 rounded-3xl border border-black/5 p-4 sm:flex-row sm:items-center"
                     >
                       <div className="h-24 w-24 overflow-hidden rounded-2xl bg-gray-100">
                         <img

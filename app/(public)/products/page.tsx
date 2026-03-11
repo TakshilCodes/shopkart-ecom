@@ -76,7 +76,7 @@ export default async function Products({ searchParams }: { searchParams?: { [key
     });
 
     return (
-        <div className="bg-neutral-50 min-h-screen px-20 py-10">
+        <div className="bg-neutral-50 min-h-screen px-20 pb-10 pt-45">
             <main>
                 <Search />
                 <div className="flex justify-between items-center">

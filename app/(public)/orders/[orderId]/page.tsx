@@ -92,7 +92,7 @@ export default async function OrderDetailsPage({
   }));
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-10">
+    <main className="max-w-6xl mx-auto px-6 pb-10 pt-45">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <Link

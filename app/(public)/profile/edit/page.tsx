@@ -26,8 +26,8 @@ export default async function EditProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8]">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="min-h-screen">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-45">
         <div className="mb-8">
           <p className="text-sm text-gray-500">Account</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight text-black">

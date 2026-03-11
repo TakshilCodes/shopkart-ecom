@@ -82,8 +82,8 @@ export default function Navbar() {
   }, [status]);
 
   return (
-    <header className="w-full border-b border-neutral-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
+      <div className="w-full max-w-6xl h-24 rounded-[28px] border-2 border-gray-200 backdrop-blur-md flex items-center justify-between px-10 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
         <Link
           href="/"
           className="text-2xl font-bold tracking-tight text-neutral-900 hover:opacity-80 transition"

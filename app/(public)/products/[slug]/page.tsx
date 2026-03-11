@@ -39,7 +39,7 @@ export default async function ProductDetail({ searchParams, params }: { params: 
     });
 
     if(!product){
-        return <div className="text-center py-20 text-gray-500">
+        return <div className="text-center px-20 pb-10 pt-45 text-gray-500">
                     Product not found
                 </div>
     }
@@ -79,7 +79,7 @@ export default async function ProductDetail({ searchParams, params }: { params: 
     const canAdd = !!selectedVariant && selectedVariant.stockQuantity > 0;
 
     return (
-        <div className="max-w-6xl mx-auto px-6 py-10">
+        <div className="max-w-6xl mx-auto px-6 pb-10 pt-45">
                 <div>
                     <div className="flex items-center gap-3 text-sm text-gray-600 mb-6">
                         <Link href={`/products`} className="p-2 rounded-full hover:bg-gray-100 transition"><img src={ArrowLeft.src} alt="Back" className="w-5 h-5 object-contain" /></Link>

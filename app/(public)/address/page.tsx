@@ -70,6 +70,7 @@ export default function AddressForm() {
 
     const router = useRouter()
     return (
+        <div className="pb-10 pt-35">
         <div className="max-w-3xl mx-auto rounded-3xl border border-gray-200 bg-white p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] mt-2">
             <div className="mb-8">
                 <p className="text-sm font-medium tracking-wide text-gray-500 uppercase">Checkout</p>
@@ -257,6 +258,7 @@ export default function AddressForm() {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     )
 }

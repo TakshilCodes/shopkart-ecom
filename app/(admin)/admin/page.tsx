@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import RevenueDoughnutChart from "@/components/charts/RevenueDoughnutChart";
 import axios from "axios";
 
 type DashboardStats = {
@@ -50,9 +51,17 @@ type LowStockProduct = {
     productvariant: LowStockVariant[];
 };
 
+type RevenueSummary = {
+    paid: number;
+    pending: number;
+    failed: number;
+    cancelled: number;
+};
+
 type DashboardResponse = {
     ok: boolean;
     stats: DashboardStats;
+    revenueSummary: RevenueSummary;
     recentOrders: RecentOrder[];
     recentProducts: RecentProduct[];
     lowStockProducts: LowStockProduct[];
@@ -196,7 +205,7 @@ export default function AdminDashboard() {
         );
     }
 
-    const { stats, recentOrders, recentProducts, lowStockProducts } = dashboard;
+    const { stats, revenueSummary, recentOrders, recentProducts, lowStockProducts } = dashboard;
 
     return (
         <div className="min-h-screen bg-zinc-50 p-6 md:p-8">
@@ -332,38 +341,51 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                    <div>
-                        <h3 className="text-lg font-semibold text-zinc-900">Revenue Summary</h3>
-                        <p className="text-sm text-zinc-500">Quick financial overview</p>
+                    <div className="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 className="text-lg font-semibold text-zinc-900">Revenue Summary</h3>
+                            <p className="text-sm text-zinc-500">
+                                Revenue split by payment status
+                            </p>
+                        </div>
+
+                        <div className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
+                            Live overview
+                        </div>
                     </div>
 
-                    <div className="mt-6 space-y-4">
+                    <div className="mt-6">
+                        <RevenueDoughnutChart
+                            paid={Number(revenueSummary.paid ?? 0)}
+                            pending={Number(revenueSummary.pending ?? 0)}
+                            failed={Number(revenueSummary.failed ?? 0)}
+                            cancelled={Number(revenueSummary.cancelled ?? 0)}
+                        />
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div className="rounded-xl bg-zinc-50 p-4">
-                            <p className="text-sm text-zinc-500">Total Revenue</p>
+                            <p className="text-sm text-zinc-500">Paid Revenue</p>
                             <p className="mt-1 text-2xl font-bold text-zinc-900">
-                                {formatCurrency(stats.totalRevenue)}
+                                {formatCurrency(revenueSummary.paid)}
                             </p>
                         </div>
 
                         <div className="rounded-xl bg-zinc-50 p-4">
-                            <p className="text-sm text-zinc-500">Paid Orders</p>
-                            <p className="mt-1 text-2xl font-bold text-zinc-900">
-                                {stats.totalOrders - stats.pendingOrders}
-                            </p>
-                        </div>
-
-                        <div className="rounded-xl bg-zinc-50 p-4">
-                            <p className="text-sm text-zinc-500">Average Order Value</p>
+                            <p className="text-sm text-zinc-500">Avg. Order Value</p>
                             <p className="mt-1 text-2xl font-bold text-zinc-900">
                                 {stats.totalOrders > 0
                                     ? formatCurrency(Number(stats.totalRevenue) / stats.totalOrders)
                                     : formatCurrency(0)}
                             </p>
                         </div>
-                    </div>
 
-                    <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center">
-                        <p className="text-sm font-medium text-zinc-700">Revenue chart goes here later</p>
+                        <div className="rounded-xl bg-zinc-50 p-4">
+                            <p className="text-sm text-zinc-500">Pending Orders</p>
+                            <p className="mt-1 text-2xl font-bold text-zinc-900">
+                                {stats.pendingOrders}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

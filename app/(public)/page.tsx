@@ -1,24 +1,19 @@
-import LogoutButton from "@/components/LogoutButton";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import LandingPageHero from "@/components/LandingHero";
+import TopSellingProducts from "@/components/TopsellingProducts";
+import FeatureCards from "@/components/FeatureCards";
+import BrandLogos from "@/components/BrandLogos";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions)
-
-  if(session?.user.role == 'Admin'){
-    redirect('/admin')
-  }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
-        <div>
-          {session?.user.email}
-        </div>
-        <LogoutButton/>
-      </main>
+    <div>
+      <LandingPageHero />
+      <TopSellingProducts />
+      <BrandLogos/>
+      <FeatureCards/>
     </div>
   );
 }
-  

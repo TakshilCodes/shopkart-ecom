@@ -19,7 +19,7 @@ export default async function SuccessPage({
     const data = await res.json();
 
     return (
-        <main className="max-w-4xl mx-auto px-6 py-20 flex items-center justify-center">
+        <main className="max-w-4xl mx-auto px-6 pb-10 pt-45 flex items-center justify-center">
             <div className="w-full max-w-md bg-white border rounded-2xl shadow-sm p-10 text-center">
 
                 {data.ok ? (
