@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -8,7 +9,8 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body className="relative min-h-screen">
+      <body className="relative min-h-screen flex flex-col">
+
         <div
           className="pointer-events-none absolute inset-0 -z-10
           bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]
@@ -18,7 +20,13 @@ export default function RootLayout({
         />
 
         <Navbar />
-        {children}
+
+        <main className="flex-1">
+          {children}
+        </main>
+
+        <Footer />
+
       </body>
     </html>
   );
