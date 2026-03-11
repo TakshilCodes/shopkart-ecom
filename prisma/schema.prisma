@@ -101,25 +101,33 @@ model Address {
   orders Order[]
 }
 
-enum OrderStatus {
+enum PaymentStatus {
   PENDING_PAYMENT
   PAID
   FAILED
   CANCELLED
 }
 
+enum OrderStatus {
+  Order_Received
+  In_Transit
+  Out_of_delivery
+  Delivered
+}
+
 model Order {
-  id               String      @id @default(uuid())
+  id               String        @id @default(uuid())
   userId           String
   addressId        String
   subtotal         Decimal
   shipping         Decimal
   total            Decimal
-  cashfreeOrderId  String?     @unique
+  cashfreeOrderId  String?       @unique
   paymentSessionId String?
-  status           OrderStatus @default(PENDING_PAYMENT)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  orderStatus      OrderStatus   @default(Order_Received)
+  status           PaymentStatus @default(PENDING_PAYMENT)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   user    Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
   address Address @relation(fields: [addressId], references: [id])
