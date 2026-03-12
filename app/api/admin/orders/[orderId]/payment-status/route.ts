@@ -2,7 +2,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { PaymentStatus } from "@/app/generated/prisma/enums";
+import { PaymentStatus } from "@/app/generated/prisma";
 
 export async function PATCH(
   req: NextRequest,
