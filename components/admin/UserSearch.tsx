@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function UserSearch() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const initialValue = searchParams.get("q") || "";
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(searchParams.get("q") || "");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,11 +20,19 @@ export default function UserSearch() {
         params.delete("q");
       }
 
-      router.replace(`/admin/users?${params.toString()}`);
+      const nextQuery = params.toString();
+      const currentQuery = searchParams.toString();
+
+      const nextUrl = nextQuery ? `${pathname}?${nextQuery}` : pathname;
+      const currentUrl = currentQuery ? `${pathname}?${currentQuery}` : pathname;
+
+      if (nextUrl !== currentUrl) {
+        router.replace(nextUrl);
+      }
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [value, router, searchParams]);
+  }, [value, pathname, router, searchParams]);
 
   return (
     <input

@@ -3,17 +3,18 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import EditProductForm from "@/components/admin/EditProductForm";
 import ProductDeleteButton from "@/components/admin/ProductDeleteButton";
+import ArrowLeft from '@/assets/icons/left-arrow.png'
 
 export default async function EditProductPage({
   params,
 }: {
-  params: Promise<{ orderId: string }>;
+  params: Promise<{ productId: string }>;
 }) {
-  const { orderId } = await params;
+  const { productId } = await params;
 
   const [product, categories] = await Promise.all([
     prisma.product.findUnique({
-      where: { id: orderId },
+      where: { id: productId },
       include: {
         category: true,
         productvariant: true,
@@ -33,9 +34,9 @@ export default async function EditProductPage({
           <div>
             <Link
               href="/admin/products"
-              className="mb-2 inline-flex text-sm font-medium text-gray-500 hover:text-black"
+              className="mb-2 inline-flex text-sm font-medium text-gray-500 hover:text-black items-center"
             >
-              ← Back to Products
+              <img src={ArrowLeft.src} alt="" className="w-3 h-3"/> <span>Back to Products</span>
             </Link>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">
               Edit Product
