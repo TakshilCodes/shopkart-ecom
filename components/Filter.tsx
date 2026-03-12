@@ -13,47 +13,82 @@ export default function Filter() {
 
     function handelPriceFilter() {
         if (tofilterprice === "" || /[^\d]/.test(tofilterprice)) {
-            setError("Invalid Input");
+            setError("Please enter a valid price")
         } else {
-            setError(null);
-            router.push(`/products?price=${tofilterprice}`);
-            setIsOpen(false);
+            setError(null)
+            router.push(`/products?price=${tofilterprice}`)
+            setIsOpen(false)
         }
     }
+
     return (
         <div>
-            <button onClick={() => setIsOpen(true)} className="border px-5 py-3 rounded-2xl">Filter</button>
+            {/* Filter Button */}
+            <button
+                onClick={() => setIsOpen(true)}
+                className="border border-gray-300 px-6 py-3 rounded-2xl text-sm font-medium hover:border-black hover:bg-gray-50 transition"
+            >
+                Filter
+            </button>
 
-            {isOpen ?
+            {isOpen && (
                 <div
-                    className="fixed inset-0 backdrop-blur-xs flex items-center justify-center"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+                    onClick={() => setIsOpen(false)}
                 >
+                    {/* Modal */}
                     <div
-                        className="bg-white p-6 rounded-lg shadow-xl w-11/12 md:w-1/2 lg:w-1/4 max-w-lg"
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white w-[90%] md:w-[420px] rounded-3xl shadow-2xl p-6"
                     >
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">Filter</h2>
-                            <button className="text-gray-500 hover:text-gray-700" onClick={() => setIsOpen(false)}>
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-semibold">Filter Products</h2>
+
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 rounded-full hover:bg-gray-100 transition"
+                            >
                                 <img src={closeImg.src} alt="close" className="w-3" />
                             </button>
                         </div>
 
-                        <div>
-                            {error ? <div className="text-red-600">{error}</div> : null}
+                        {/* Filter Content */}
+                        <div className="space-y-4">
+
                             <div>
-                                <p className="text-md font-bold">Filter by price</p>
-                                <div className="flex justify-between">
-                                    <div className="border w-full rounded-2xl p-2">
-                                        <input type="text" onChange={(e) => setTofilterprice(e.target.value)} className="outline-none" placeholder="Enter price" />
-                                    </div>
-                                    <button className="mx-5 px-4 border rounded-2xl bg-black text-white" onClick={handelPriceFilter}>Filter</button>
+                                <p className="text-sm font-medium text-gray-700 mb-2">
+                                    Maximum Price
+                                </p>
+
+                                <div className="flex gap-3">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter price"
+                                        value={tofilterprice}
+                                        onChange={(e) => setTofilterprice(e.target.value)}
+                                        className="flex-1 border border-gray-300 rounded-xl px-4 py-2 text-sm outline-none focus:border-black"
+                                    />
+
+                                    <button
+                                        onClick={handelPriceFilter}
+                                        className="px-5 py-2 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition"
+                                    >
+                                        Apply
+                                    </button>
                                 </div>
                             </div>
+
+                            {error && (
+                                <p className="text-sm text-red-500">
+                                    {error}
+                                </p>
+                            )}
+
                         </div>
                     </div>
                 </div>
-                : null
-            }
+            )}
         </div>
     )
 }

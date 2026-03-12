@@ -39,7 +39,7 @@ export default async function EditAddressPage({
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
         <div className="mb-8">
           <p className="text-sm text-gray-500">Account / Addresses</p>

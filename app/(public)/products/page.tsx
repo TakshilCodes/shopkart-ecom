@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import Filter from "@/components/Filter";
 import Search from "@/components/Search";
 import { authOptions } from "@/lib/auth";
@@ -87,77 +86,116 @@ export default async function Products(props: PageProps<"/products">) {
   });
 
   return (
-    <div className="bg-neutral-50 min-h-screen px-20 pb-10 pt-45">
-      <main>
-        <Search />
-        <div className="flex justify-between items-center">
-          <Filter />
-          <p className="text-5xl">Products</p>
+    <div className="min-h-screen px-4 pb-12 pt-40 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl">
+        <div className="mb-8 space-y-5">
+          <Search />
+
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900">
+                Products
+              </p>
+              <p className="mt-2 text-sm sm:text-base text-gray-600">
+                Explore premium styles, discover categories, and find your perfect pair.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <Filter />
+              <div className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm">
+                {totalproducts} product{totalproducts !== 1 ? "s" : ""}
+              </div>
+            </div>
+          </div>
         </div>
 
         {categorys.length > 0 ? (
-          <div className="flex justify-start 2xl:justify-center items-center flex-nowrap space-x-10 py-10 overflow-x-auto scroll-smooth scrollbar-hide">
+          <div className="mb-8 flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
             <Link
-              className="py-2 px-5 border border-gray-300 hover:border-black rounded-xl"
+              className={`whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition ${
+                !hasCategory
+                  ? "border-black bg-black text-white"
+                  : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+              }`}
               href="/products"
             >
               All
             </Link>
+
             {categorys.map((category) => (
-              <div key={category.slug}>
-                <Link
-                  className="py-3 px-4 border border-gray-300 hover:border-black rounded-xl whitespace-nowrap"
-                  href={`/products?category=${category.slug}`}
-                >
-                  {category.name}
-                </Link>
-              </div>
+              <Link
+                key={category.slug}
+                className={`whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition ${
+                  rawCategory === category.slug
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                }`}
+                href={`/products?category=${category.slug}`}
+              >
+                {category.name}
+              </Link>
             ))}
           </div>
         ) : null}
 
         {products.length > 0 ? (
-          <div>
-            <div className="flex justify-center items-center flex-wrap gap-6 cursor-pointer py-10">
+          <>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {products.map((product) => {
                 return (
-                  <div key={product.slug}>
-                    <div className="p-5 w-full sm:w-72 md:w-80 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all ease-in-out duration-300 rounded-3xl">
-                      <Link href={`/products/${product.slug}`}>
-                        <img src={product.prodImage} alt={product.name} />
+                  <div
+                    key={product.slug}
+                    className="group overflow-hidden rounded-3xl border border-gray-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className="block overflow-hidden rounded-2xl bg-gray-50"
+                    >
+                      <img
+                        src={product.prodImage}
+                        alt={product.name}
+                        className="h-64 w-full object-cover transition duration-300 group-hover:scale-[1.04]"
+                      />
+                    </Link>
+
+                    <div className="pt-4">
+                      <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-gray-400">
+                        {product.category.name}
+                      </p>
+
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="line-clamp-2 text-base font-semibold text-gray-900 hover:text-black"
+                      >
+                        {product.name.length > 20
+                          ? product.name.slice(0, 22) + "..."
+                          : product.name}
                       </Link>
-                      <div className="overflow-auto pt-3">
+
+                      <div className="mt-5 flex items-center justify-between gap-3">
                         <Link
                           href={`/products/${product.slug}`}
-                          className="text-sm font-bold text-center"
+                          className="text-lg font-semibold tracking-tight text-gray-900"
                         >
-                          {product.name.length > 20
-                            ? product.name.slice(0, 22) + "..."
-                            : product.name}
+                          ₹{String(product.price)}
                         </Link>
-                        <div className="flex justify-between items-center p-3 mx-5">
+
+                        {product._count.productvariant > 0 ? (
                           <Link
                             href={`/products/${product.slug}`}
-                            className="font-bold"
+                            className="inline-flex h-11 items-center justify-center rounded-xl bg-black px-5 text-sm font-medium text-white transition hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-black/20 active:scale-[0.98]"
                           >
-                            ₹{String(product.price)}
+                            Select Size
                           </Link>
-                          {product._count.productvariant > 0 ? (
-                            <Link
-                              href={`/products/${product.slug}`}
-                              className="inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-black/20 active:scale-[0.98] bg-black text-white hover:bg-gray-900"
-                            >
-                              Select a Size
-                            </Link>
-                          ) : (
-                            <button
-                              disabled
-                              className="inline-flex items-center justify-center h-11 px-6 rounded-xl text-sm font-medium bg-gray-300 cursor-not-allowed"
-                            >
-                              Unavailable
-                            </button>
-                          )}
-                        </div>
+                        ) : (
+                          <button
+                            disabled
+                            className="inline-flex h-11 cursor-not-allowed items-center justify-center rounded-xl bg-gray-200 px-5 text-sm font-medium text-gray-500"
+                          >
+                            Unavailable
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -165,17 +203,30 @@ export default async function Products(props: PageProps<"/products">) {
               })}
             </div>
 
-            <div className="flex justify-center mt-20">
+            <div className="mt-14 flex flex-wrap items-center justify-center gap-2">
               {currentPage > 1 ? (
                 search ? (
-                  <Link href={`/products?page=${currentPage - 1}&search=${search}`}>
+                  <Link
+                    href={`/products?page=${currentPage - 1}&search=${search}`}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-black hover:text-black"
+                  >
                     Prev
                   </Link>
                 ) : (
-                  <Link href={`/products?page=${currentPage - 1}`}>Prev</Link>
+                  <Link
+                    href={`/products?page=${currentPage - 1}`}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-black hover:text-black"
+                  >
+                    Prev
+                  </Link>
                 )
               ) : (
-                <button disabled>Prev</button>
+                <button
+                  disabled
+                  className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-xl border border-gray-200 bg-gray-100 px-4 text-sm font-medium text-gray-400"
+                >
+                  Prev
+                </button>
               )}
 
               {totalpages_array.map((page) => (
@@ -183,14 +234,22 @@ export default async function Products(props: PageProps<"/products">) {
                   {search ? (
                     hasCategory ? (
                       <Link
-                        className="cursor-pointer p-0.5 px-2 m-2 border"
+                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
+                          currentPage === page
+                            ? "border-black bg-black text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                        }`}
                         href={`/products?page=${page}&search=${search}&category=${rawCategory}`}
                       >
                         {page}
                       </Link>
                     ) : (
                       <Link
-                        className="cursor-pointer p-0.5 px-2 m-2 border"
+                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
+                          currentPage === page
+                            ? "border-black bg-black text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                        }`}
                         href={`/products?page=${page}&search=${search}`}
                       >
                         {page}
@@ -198,7 +257,11 @@ export default async function Products(props: PageProps<"/products">) {
                     )
                   ) : (
                     <Link
-                      className="cursor-pointer p-0.5 px-2 m-2 border"
+                      className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
+                        currentPage === page
+                          ? "border-black bg-black text-white"
+                          : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                      }`}
                       href={`/products?page=${page}${
                         hasCategory ? `&category=${rawCategory}` : ""
                       }`}
@@ -211,27 +274,50 @@ export default async function Products(props: PageProps<"/products">) {
 
               {totalpages > 1 && currentPage !== totalpages ? (
                 search ? (
-                  <Link href={`/products?page=${currentPage + 1}&search=${search}`}>
+                  <Link
+                    href={`/products?page=${currentPage + 1}&search=${search}`}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-black hover:text-black"
+                  >
                     Next
                   </Link>
                 ) : (
-                  <Link href={`/products?page=${currentPage + 1}`}>Next</Link>
+                  <Link
+                    href={`/products?page=${currentPage + 1}`}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-black hover:text-black"
+                  >
+                    Next
+                  </Link>
                 )
               ) : (
-                <button disabled>Next</button>
+                <button
+                  disabled
+                  className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-xl border border-gray-200 bg-gray-100 px-4 text-sm font-medium text-gray-400"
+                >
+                  Next
+                </button>
               )}
             </div>
-          </div>
+          </>
         ) : search ? (
-          <div className="flex justify-center items-center py-40">
-            <div className="text-lg">
-              No products matching{" "}
-              <span className="font-bold text-blue-700">{search}</span>.
+          <div className="flex justify-center items-center py-32">
+            <div className="rounded-3xl border border-gray-200 bg-white px-10 py-12 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-xl">
+                🔍
+              </div>
+              <p className="text-lg text-gray-700">
+                No products matching{" "}
+                <span className="font-semibold text-black">{search}</span>.
+              </p>
             </div>
           </div>
         ) : (
-          <div className="flex justify-center items-center py-40">
-            No products.
+          <div className="flex justify-center items-center py-32">
+            <div className="rounded-3xl border border-gray-200 bg-white px-10 py-12 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-xl">
+                📦
+              </div>
+              <p className="text-lg text-gray-700">No products.</p>
+            </div>
           </div>
         )}
       </main>
