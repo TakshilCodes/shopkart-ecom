@@ -64,7 +64,7 @@ export default function AddressForm() {
         }
 
         setConfirm("Done, your address is added")
-        router.push('/checkout')
+        router.push('/profile')
         return
     }
 
@@ -73,7 +73,7 @@ export default function AddressForm() {
         <div className="pb-10 pt-35">
         <div className="max-w-3xl mx-auto rounded-3xl border border-gray-200 bg-white p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] mt-2">
             <div className="mb-8">
-                <p className="text-sm font-medium tracking-wide text-gray-500 uppercase">Checkout</p>
+                <p className="text-sm font-medium tracking-wide text-gray-500 uppercase">Add address</p>
                 <h2 className="mt-2 text-3xl font-semibold text-gray-900">Shipping Address</h2>
                 <p className="mt-2 text-sm text-gray-500">Enter the address where you want your order delivered.</p>
                 {error ? <div className="text-red-500">{error}</div> : null}

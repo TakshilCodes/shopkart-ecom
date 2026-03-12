@@ -1,3 +1,5 @@
+import { deleteAddress } from "@/actions/action.address";
+import DeleteAddressButton from "@/components/DeleteAddressButton";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
@@ -179,7 +181,7 @@ export default async function ProfilePage() {
                                 </div>
 
                                 <Link
-                                    href="/account/addresses/new"
+                                    href="/address"
                                     className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition"
                                 >
                                     Add Address
@@ -230,15 +232,13 @@ export default async function ProfilePage() {
 
                                                 <div className="mt-5 flex flex-wrap gap-3">
                                                     <Link
-                                                        href={`/account/addresses/${address.id}/edit`}
+                                                        href={`/address/${address.id}/edit`}
                                                         className="inline-flex items-center justify-center h-10 px-4 rounded-xl border border-gray-300 text-sm font-medium text-black hover:border-black hover:bg-gray-50 transition"
                                                     >
                                                         Edit
                                                     </Link>
 
-                                                    <button className="inline-flex items-center justify-center h-10 px-4 rounded-xl border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50 transition">
-                                                        Delete
-                                                    </button>
+                                                    <DeleteAddressButton id={address.id} />
                                                 </div>
                                             </div>
                                         ))}
@@ -274,7 +274,7 @@ export default async function ProfilePage() {
                                         </p>
 
                                         <Link
-                                            href="/account/addresses/new"
+                                            href="/address"
                                             className="inline-flex items-center justify-center mt-5 h-11 px-5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition"
                                         >
                                             Add Address
@@ -349,7 +349,7 @@ export default async function ProfilePage() {
                                     </Link>
 
                                     <Link
-                                        href="/account/addresses/new"
+                                        href="/address"
                                         className="inline-flex items-center justify-center h-11 rounded-xl border border-gray-300 text-sm font-medium text-black hover:border-black hover:bg-gray-50 transition"
                                     >
                                         Add New Address
