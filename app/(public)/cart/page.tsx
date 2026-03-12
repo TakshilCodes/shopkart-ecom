@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import deleteIcon from "@/assets/icons/delete.png";
 import { deleteCartItem } from "@/actions/action.cart";
+import EmptyCart from '@/assets/emptycart.png'
 
 export default async function Cart() {
   const session = await getServerSession(authOptions);
@@ -60,9 +61,7 @@ export default async function Cart() {
       <main className="max-w-6xl mx-auto px-6 pb-12 pt-40">
         <section className="rounded-3xl border border-gray-200 bg-white px-6 py-14 shadow-sm">
           <div className="mx-auto flex max-w-lg flex-col items-center text-center">
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl">
-              🛒
-            </div>
+            <img src={EmptyCart.src} alt="cart is empty" />
 
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900">
               Your Cart
@@ -89,9 +88,7 @@ export default async function Cart() {
       <main className="max-w-6xl mx-auto px-6 pb-12 pt-40">
         <section className="rounded-3xl border border-gray-200 bg-white px-6 py-14 shadow-sm">
           <div className="mx-auto flex max-w-lg flex-col items-center text-center">
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl">
-              📦
-            </div>
+             <img src={EmptyCart.src} alt="cart is empty" />
 
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900">
               Your Cart

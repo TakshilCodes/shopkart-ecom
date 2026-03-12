@@ -39,7 +39,7 @@ export default function Filter() {
                     {/* Modal */}
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-[90%] md:w-[420px] rounded-3xl shadow-2xl p-6"
+                        className="bg-white w-[90%] md:w-105 rounded-3xl shadow-2xl p-6"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between mb-6">

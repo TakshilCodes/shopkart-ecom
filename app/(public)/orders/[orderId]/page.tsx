@@ -200,7 +200,7 @@ export default async function OrderDetailsPage({
                             )}
                           </div>
 
-                          <div className="shrink-0 rounded-2xl bg-gray-50 px-4 py-3 text-left sm:min-w-[140px] sm:text-right">
+                          <div className="shrink-0 rounded-2xl bg-gray-50 px-4 py-3 text-left sm:min-w-35 sm:text-right">
                             <p className="text-xs uppercase tracking-wide text-gray-400">
                               Item Total
                             </p>
