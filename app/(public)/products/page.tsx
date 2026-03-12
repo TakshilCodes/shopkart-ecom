@@ -3,6 +3,7 @@ import Search from "@/components/Search";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import CategoryTabs from "@/components/CategoryTabs";
 import Link from "next/link";
 
 export default async function Products(props: PageProps<"/products">) {
@@ -111,32 +112,10 @@ export default async function Products(props: PageProps<"/products">) {
         </div>
 
         {categorys.length > 0 ? (
-          <div className="mb-8 flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            <Link
-              className={`whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition ${
-                !hasCategory
-                  ? "border-black bg-black text-white"
-                  : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
-              }`}
-              href="/products"
-            >
-              All
-            </Link>
-
-            {categorys.map((category) => (
-              <Link
-                key={category.slug}
-                className={`whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition ${
-                  rawCategory === category.slug
-                    ? "border-black bg-black text-white"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
-                }`}
-                href={`/products?category=${category.slug}`}
-              >
-                {category.name}
-              </Link>
-            ))}
-          </div>
+          <CategoryTabs
+            categories={categorys}
+            initialCategory={hasCategory ? String(rawCategory) : null}
+          />
         ) : null}
 
         {products.length > 0 ? (
@@ -234,22 +213,20 @@ export default async function Products(props: PageProps<"/products">) {
                   {search ? (
                     hasCategory ? (
                       <Link
-                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
-                          currentPage === page
+                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${currentPage === page
                             ? "border-black bg-black text-white"
                             : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
-                        }`}
+                          }`}
                         href={`/products?page=${page}&search=${search}&category=${rawCategory}`}
                       >
                         {page}
                       </Link>
                     ) : (
                       <Link
-                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
-                          currentPage === page
+                        className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${currentPage === page
                             ? "border-black bg-black text-white"
                             : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
-                        }`}
+                          }`}
                         href={`/products?page=${page}&search=${search}`}
                       >
                         {page}
@@ -257,14 +234,12 @@ export default async function Products(props: PageProps<"/products">) {
                     )
                   ) : (
                     <Link
-                      className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
-                        currentPage === page
+                      className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${currentPage === page
                           ? "border-black bg-black text-white"
                           : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
-                      }`}
-                      href={`/products?page=${page}${
-                        hasCategory ? `&category=${rawCategory}` : ""
-                      }`}
+                        }`}
+                      href={`/products?page=${page}${hasCategory ? `&category=${rawCategory}` : ""
+                        }`}
                     >
                       {page}
                     </Link>
