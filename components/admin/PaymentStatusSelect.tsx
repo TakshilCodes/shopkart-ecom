@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentStatus } from "@/app/generated/prisma/enums";
+import { PaymentStatus } from "@/app/generated/prisma";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 

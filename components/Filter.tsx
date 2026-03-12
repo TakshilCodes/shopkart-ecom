@@ -8,12 +8,12 @@ export default function Filter() {
 
     const [isOpen, setIsOpen] = useState(false)
     const [tofilterprice, setTofilterprice] = useState('')
-    const [error, setError] = useState<string>()
     const router = useRouter()
+    const [error, setError] = useState<string | null>(null)
 
     function handelPriceFilter() {
         if (tofilterprice === "" || /[^\d]/.test(tofilterprice)) {
-            setError('Invalid Input');
+            setError("Invalid Input");
         } else {
             setError(null);
             router.push(`/products?price=${tofilterprice}`);
@@ -44,7 +44,7 @@ export default function Filter() {
                                 <p className="text-md font-bold">Filter by price</p>
                                 <div className="flex justify-between">
                                     <div className="border w-full rounded-2xl p-2">
-                                        <input type="text" onChange={(e) => setTofilterprice(e.target.value)} className="outline-none" placeholder="Enter price"/>
+                                        <input type="text" onChange={(e) => setTofilterprice(e.target.value)} className="outline-none" placeholder="Enter price" />
                                     </div>
                                     <button className="mx-5 px-4 border rounded-2xl bg-black text-white" onClick={handelPriceFilter}>Filter</button>
                                 </div>

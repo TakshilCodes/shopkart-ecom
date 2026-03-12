@@ -7,7 +7,7 @@ import OrdersFilters from "@/components/admin/OrdersFilters";
 import DeleteOrderButton from "@/components/admin/DeleteOrderButton";
 import OrderStatusSelect from "@/components/admin/OrderStatusSelect";
 import PaymentStatusSelect from "@/components/admin/PaymentStatusSelect";
-import { OrderStatus, PaymentStatus } from "@/app/generated/prisma/enums";
+import { OrderStatus, PaymentStatus } from "@/app/generated/prisma";
 import { Prisma } from "@/app/generated/prisma/client";
 
 type SearchParams = Promise<{

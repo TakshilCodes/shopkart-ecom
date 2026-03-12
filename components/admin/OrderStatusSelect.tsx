@@ -1,6 +1,6 @@
 "use client";
 
-import { OrderStatus } from "@/app/generated/prisma/enums";
+import { OrderStatus } from "@/app/generated/prisma";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 

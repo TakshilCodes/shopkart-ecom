@@ -8,7 +8,7 @@ import leftArrow from "@/assets/icons/left-arrow.png";
 import OrderStatusSelect from "@/components/admin/OrderStatusSelect";
 import PaymentStatusSelect from "@/components/admin/PaymentStatusSelect";
 import DeleteOrderButton from "@/components/admin/DeleteOrderButton";
-import { OrderStatus, PaymentStatus } from "@/app/generated/prisma/enums";
+import { OrderStatus, PaymentStatus } from "@/app/generated/prisma";
 
 function getPaymentBadgeClasses(status: PaymentStatus) {
   switch (status) {
