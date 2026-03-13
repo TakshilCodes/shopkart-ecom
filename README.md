@@ -1,98 +1,146 @@
-# FullStack E-Commerce (In Progress)
 
-A full-stack e-commerce application built using modern web technologies.  
-This project focuses on implementing production-level architecture, clean code practices, and scalable database design.
+# 🛍️ ShopKart
 
-**Status:** Actively under development
+A modern **full-stack e-commerce platform** built with **Next.js, TypeScript, Prisma, and PostgreSQL**.
+
+ShopKart provides a complete online shopping experience including authentication, product browsing, cart management, checkout, and admin dashboard.
 
 ---
 
-## Tech Stack
+# 🚀 Live Demo
 
-### Frontend
+Website: https://shopkartsite.vercel.app
+
+---
+
+# ✨ Features
+
+## 👤 User Features
+
+- User signup & login
+- Email verification with OTP
+- Secure authentication (NextAuth + JWT)
+- Browse products
+- Category filtering
+- Product search
+- Pagination
+- Add to cart
+- Address management
+- Checkout system
+- Payment gateway integration
+- Order creation and tracking
+
+---
+
+## 🛠 Admin Features
+
+- Create / delete categories
+- Add products
+- Publish / unpublish products
+- Manage users
+- Delete users
+- User search
+
+Admin routes:
+
+/admin  
+/admin/products  
+/admin/categories  
+/admin/users  
+
+---
+
+# 🧰 Tech Stack
+
+Frontend
 - Next.js (App Router)
+- React
 - TypeScript
 - Tailwind CSS
+- Char.js
 
-### Backend
-- Next.js API Routes / Server Actions
+Backend
+- Next.js API Routes
 - Prisma ORM
 - PostgreSQL (Neon)
+- Redis (OTP storage)
 
-### Tooling
-- Git & GitHub
+Authentication
+- NextAuth.js
+- JWT sessions
+- Email OTP verification
 
----
+Payments
+- Cashfree Payment Gateway
 
-## Project Objective
-
-This project is being built to:
-
-- Implement structured full-stack architecture
-- Design and manage relational database schemas
-- Practice pagination, filtering, and search logic
-- Build authentication and authorization systems
-- Integrate payment workflows
-- Maintain clean folder structure and modular code
+Deployment
+- Vercel
 
 ---
 
-## Current Features
+## 📸 Screenshots
 
-- Product schema with Prisma
-- Product listing page
-- Server-side pagination
-- Search functionality
-- Price filtering
-- Dynamic product pages using slug
-- Database integration with PostgreSQL
+### Homepage
+![Homepage](public/shopkart-home.png)
 
----
+### Products Page
+![Products](public/shopkart-shop.png)
 
-## In Progress
+### Cart Page
+![Cart](public/shopkart-cart.png)
 
-- Product detail page refinement
-- Add to cart functionality
-- Cart state management
-- Authentication system
-- Admin dashboard (product management)
-- Image handling (Cloudinary integration)
-- Order management system
-- Payment integration
+### Admin Dashboard
+![Dashboard](public/shopkart-dashboard.png)
+
+### Admin Product Page
+![Admin Products](public/shopkart-admin-products.png)
+
+### Admin Edit Product
+![Admin Edit Product](public/shopkart-admin-products-edit.png)
 
 ---
 
-## Environment Setup
+# ⚙️ Installation
 
-Create a `.env` file in the root directory:
+Clone repository
 
-DATABASE_URL=your_postgres_connection_string
+git clone https://github.com/TakshilCodes/shopkart.git
+cd shopkart
 
----
+Install dependencies
 
-## Local Development
-
-npm install  
-npx prisma generate  
-npx prisma db push  
-npm run dev  
+npm install
 
 ---
 
-## Learning Focus
+# 🗄 Database Setup
 
-This project strengthens:
+Run migrations
 
-- Server-first rendering patterns
-- Prisma schema management
-- Query optimization
-- Structured Git workflows
-- Scalable application design
+npx prisma migrate dev
+
+Generate Prisma client
+
+npx prisma generate
+
+Optional:
+
+npx prisma studio
 
 ---
 
-## Author
+# ▶️ Run Development Server
 
-Takshil Pandya  
-Diploma in Computer Science & Engineering  
-Full-stack development track
+npm run dev
+
+Open http://localhost:3000
+
+---
+
+# 👨‍💻 Author
+
+Takshil Pandya
+
+GitHub: https://github.com/TakshilCodes  
+LinkedIn: https://linkedin.com/in/takshilpandya  
+
