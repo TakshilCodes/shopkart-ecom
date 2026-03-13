@@ -5,6 +5,16 @@ import CategoryTabs from "@/components/CategoryTabs";
 import ProductsGrid from "@/components/ProductsGrid";
 import ProductsGridSkeleton from "@/components/ProductsGridSkeleton";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Products | ShopKart",
+  description:
+    "Browse premium shoes, clothing, watches, and accessories on ShopKart.",
+  alternates: {
+    canonical: "https://shopkartsite.vercel.app/products",
+  },
+};
 
 export default async function Products(props: PageProps<"/products">) {
   const searchParams = await props.searchParams;

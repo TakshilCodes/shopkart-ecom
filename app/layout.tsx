@@ -21,6 +21,20 @@ export const metadata: Metadata = {
   verification: {
     google: "miO0L6AE5G0US6-FUwEhcM6-eHdIZXihHW2O8py_uX4",
   },
+  openGraph: {
+    title: "ShopKart",
+    description: "Premium shoes, clothing and accessories",
+    url: "https://shopkartsite.vercel.app",
+    siteName: "ShopKart",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({

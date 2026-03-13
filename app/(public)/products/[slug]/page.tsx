@@ -5,6 +5,11 @@ import ArrowLeft from "@/assets/icons/left-arrow.png";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import ProductOptions from "@/components/ProductOptions";
+import { Metadata } from "next";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
 export default async function ProductDetail(
   props: PageProps<"/products/[slug]">
@@ -116,4 +121,43 @@ export default async function ProductDetail(
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    select: {
+      name: true,
+      slug: true,
+      prodImage: true,
+    },
+  });
+
+  if (!product) {
+    return {
+      title: "Product Not Found | ShopKart",
+    };
+  }
+
+  return {
+    title: `${product.name} | ShopKart`,
+    description: `Buy ${product.name} online at ShopKart.`,
+    alternates: {
+      canonical: `https://shopkartsite.vercel.app/products/${product.slug}`,
+    },
+    openGraph: {
+      title: `${product.name} | ShopKart`,
+      description: `Buy ${product.name} online at ShopKart.`,
+      url: `https://shopkartsite.vercel.app/products/${product.slug}`,
+      siteName: "ShopKart",
+      images: [
+        {
+          url: product.prodImage,
+        },
+      ],
+      type: "website",
+    },
+  };
 }
