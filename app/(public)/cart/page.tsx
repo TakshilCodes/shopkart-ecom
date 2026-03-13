@@ -6,6 +6,7 @@ import Link from "next/link";
 import deleteIcon from "@/assets/icons/delete.png";
 import { deleteCartItem } from "@/actions/action.cart";
 import EmptyCart from '@/assets/emptycart.png'
+import DeleteCartButton from "@/components/DeleteCartButton";
 
 export default async function Cart() {
   const session = await getServerSession(authOptions);
@@ -180,20 +181,7 @@ export default async function Cart() {
                   </Link>
 
                   <div className="flex items-center justify-between gap-3 sm:ml-auto sm:flex-col sm:items-end sm:justify-center sm:gap-6">
-                    <form action={deleteCartItem}>
-                      <input type="hidden" name="cartId" value={cartItem.id} />
-
-                      <button
-                        type="submit"
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white transition hover:bg-gray-50"
-                      >
-                        <img
-                          src={deleteIcon.src}
-                          alt="delete item"
-                          className="w-5"
-                        />
-                      </button>
-                    </form>
+                    <DeleteCartButton cartId={cartItem.id} />
 
                     <div>
                       <Button

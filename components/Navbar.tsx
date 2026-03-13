@@ -5,6 +5,7 @@ import arrowdown from "@/assets/icons/down-arrow.png";
 import cart from '@/assets/icons/cart.png'
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
+import useCartStore from "@/store/cartStore";
 
 const CATEGORIES = [
   { label: "Sneakers", href: "/products?category=sneakers" },
@@ -25,7 +26,9 @@ export default function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0)
+  const cartCount = useCartStore((state) => state.cartCount);
+  const refreshCartCount = useCartStore((state) => state.refreshCartCount);
+  const clearCartCount = useCartStore((state) => state.clearCartCount);
 
   const catRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
@@ -51,35 +54,12 @@ export default function Navbar() {
 
   useEffect(() => {
     if (status !== "authenticated") {
-      setCartCount(0);
+      clearCartCount();
       return;
     }
 
-    let cancelled = false;
-
-    async function loadCartCount() {
-      try {
-        const res = await fetch("/api/cart/count", { cache: "no-store" });
-        const data = await res.json();
-        if (!cancelled) setCartCount(data?.count ?? 0);
-      } catch {
-        if (!cancelled) setCartCount(0);
-      }
-    }
-
-    loadCartCount();
-
-    function onCartUpdated() {
-      loadCartCount();
-    }
-
-    window.addEventListener("cart:updated", onCartUpdated);
-
-    return () => {
-      cancelled = true;
-      window.removeEventListener("cart:updated", onCartUpdated);
-    };
-  }, [status]);
+    refreshCartCount();
+  }, [status, refreshCartCount, clearCartCount]);
 
   return (
     <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">

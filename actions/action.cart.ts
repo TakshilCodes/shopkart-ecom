@@ -2,6 +2,7 @@
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function incrementCartItem(productVariantId: string) {
@@ -31,66 +32,134 @@ export async function incrementCartItem(productVariantId: string) {
                 quantity: 1
             }
         })
-        return { ok: true, error: null }
+        const totalCartItems = await prisma.cart.aggregate({
+            where: {
+                userId: user,
+            },
+            _sum: {
+                quantity: true,
+            },
+        });
+
+        revalidatePath("/cart");
+
+        return {
+            ok: true,
+            error: null,
+            count: totalCartItems._sum.quantity ?? 0,
+        };
     } catch (e) {
         return { ok: false, error: e }
     }
 }
 
-export async function decrementCartItem(productVariantId: string, currentQuantity: number) {
+export async function decrementCartItem(productVariantId: string) {
     try {
-        const session = await getServerSession(authOptions)
-        const user = session?.user?.id;
+        const session = await getServerSession(authOptions);
+        const userId = session?.user?.id;
 
-        if (!user) {
-            redirect('/signin')
+        if (!userId) {
+            redirect("/signin");
         }
 
-        if (currentQuantity <= 1) {
+        const cartItem = await prisma.cart.findUnique({
+            where: {
+                userId_productVariantId: {
+                    userId,
+                    productVariantId,
+                },
+            },
+            select: {
+                quantity: true,
+            },
+        });
+
+        if (!cartItem) {
+            return { ok: false, error: "Cart item not found", count: 0 };
+        }
+
+        if (cartItem.quantity <= 1) {
             await prisma.cart.delete({
                 where: {
                     userId_productVariantId: {
-                        userId: user,
+                        userId,
                         productVariantId,
-                    }
-                }
-            })
-        }
-        else {
+                    },
+                },
+            });
+        } else {
             await prisma.cart.update({
                 where: {
-                    userId_productVariantId:{
-                        userId:user,
+                    userId_productVariantId: {
+                        userId,
                         productVariantId,
-                    }
+                    },
                 },
                 data: {
                     quantity: {
-                        decrement: 1
-                    }
-                }
-            })
+                        decrement: 1,
+                    },
+                },
+            });
         }
-        return { ok: true, error: null }
+
+        const totalCartItems = await prisma.cart.aggregate({
+            where: {
+                userId,
+            },
+            _sum: {
+                quantity: true,
+            },
+        });
+
+        revalidatePath("/cart");
+
+        return {
+            ok: true,
+            error: null,
+            count: totalCartItems._sum.quantity ?? 0,
+        };
     } catch (e) {
-        return { ok: false, error: "Something went wrong" }
+        return { ok: false, error: "Something went wrong", count: 0 };
     }
 }
 
-export async function deleteCartItem(formData: FormData) {
-  const cartId = formData.get("cartId") as string;
 
-  const session = await getServerSession(authOptions);
-  const userId = session?.user?.id;
+export async function deleteCartItem(cartId: string) {
+    try {
+        const session = await getServerSession(authOptions);
+        const userId = session?.user?.id;
 
-  if (!userId || !cartId) return;
+        if (!userId) {
+            redirect("/signin");
+        }
 
-  await prisma.cart.deleteMany({
-    where: {
-      id: cartId,
-      userId: userId,
-    },
-  });
+        await prisma.cart.deleteMany({
+            where: {
+                id: cartId,
+                userId: userId,
+            },
+        });
 
-  redirect('/cart')
+        const totalCartItems = await prisma.cart.aggregate({
+            where: {
+                userId,
+            },
+            _sum: {
+                quantity: true,
+            },
+        });
+
+        revalidatePath("/cart");
+
+        return {
+            ok: true,
+            count: totalCartItems._sum.quantity ?? 0,
+        };
+    } catch {
+        return {
+            ok: false,
+            count: 0,
+        };
+    }
 }
