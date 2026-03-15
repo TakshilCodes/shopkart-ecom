@@ -124,7 +124,7 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link href="/" className="hover:text-black transition">Help</Link>
+          <Link href="/help" className="hover:text-black transition">Help</Link>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -213,7 +213,7 @@ export default function Navbar() {
                   )}
 
                   <Link
-                    href="/"
+                    href="/help"
                     onClick={() => {
                       setMenuOpen(false);
                       setMobileCatOpen(false);
