@@ -10,10 +10,6 @@ const CASHFREE_BASE_URL =
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("CLIENT ID EXISTS:", !!process.env.CASHFREE_CLIENT_ID);
-console.log("CLIENT SECRET EXISTS:", !!process.env.CASHFREE_CLIENT_SECRET);
-console.log("ENV:", process.env.CASHFREE_ENV);
-console.log("BASE URL:", CASHFREE_BASE_URL);
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
 

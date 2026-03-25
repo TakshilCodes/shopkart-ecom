@@ -47,8 +47,7 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    // check exact field from your live response in sandbox logs
+    
     const isPaid =
       data.order_status === "PAID" ||
       data.order_status === "SUCCESS";

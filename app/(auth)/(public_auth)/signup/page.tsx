@@ -64,8 +64,10 @@ export default function Signup() {
             return setLoading(false)
 
         } catch (e: any) {
-            setLoading(false)
-            return setError(e?.response.data || 'something went wrong!')
+            const message = e?.response?.data?.error || "Something went wrong!";
+            setError(message);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -76,7 +78,7 @@ export default function Signup() {
 
                 <h1 className="text-3xl font-bold text-center text-neutral-800">Create Account</h1>
                 <p className="text-center text-sm text-neutral-500 mt-2">Join ShopKart and step into style 👟</p>
-                {error ? <div>{error}</div> : null}
+                {error ? <div className="text-red-600 text-center py-2">{error}</div> : null}
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                     <div className="flex flex-col space-y-2">

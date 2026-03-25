@@ -323,7 +323,7 @@ export default function HelpPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-neutral-200 bg-gradient-to-br from-neutral-900 to-neutral-700 p-6 text-white shadow-sm">
+          <div className="rounded-3xl border border-neutral-200 bg-linear-to-br from-neutral-900 to-neutral-700 p-6 text-white shadow-sm">
             <h3 className="text-xl font-semibold">Before you checkout</h3>
             <ul className="mt-4 space-y-3 text-sm text-neutral-200">
               <li>• Confirm your selected size or variant</li>
