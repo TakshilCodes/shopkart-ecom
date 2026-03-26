@@ -6,17 +6,13 @@ import cart from '@/assets/icons/cart.png'
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import useCartStore from "@/store/cartStore";
+import { getCategories } from "@/actions/action.getCategories";
 
-const CATEGORIES = [
-  { label: "Sneakers", href: "/products?category=sneakers" },
-  { label: "Football", href: "/products?category=football" },
-  { label: "Cricket", href: "/products?category=cricket" },
-  { label: "Tennis", href: "/products?category=tennis" },
-  { label: "Puma Nitro Collection", href: "/products?category=puma-nitro-collection" },
-  { label: "Adidas Originals", href: "/products?category=adidas-originals" },
-  { label: "Running", href: "/products?category=running" },
-  { label: "Sportswear", href: "/products?category=sportswear" }
-];
+type categories = {
+  id: string,
+  name: string,
+  slug: string
+}
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -27,12 +23,32 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
   const cartCount = useCartStore((state) => state.cartCount);
+  const [categories, setCategories] = useState<categories[]>([])
+  const [error, setError] = useState("")
   const refreshCartCount = useCartStore((state) => state.refreshCartCount);
   const clearCartCount = useCartStore((state) => state.clearCartCount);
 
   const catRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    async function getCategory() {
+      try {
+        const res = await getCategories();
+
+        if (!res.ok) {
+          setError(res.error!);
+        } else {
+          setCategories(res.data || []);
+        }
+      } catch {
+        setError("Something went wrong");
+      }
+    }
+
+    getCategory();
+  }, []);
 
   useEffect(() => {
     function onDown(e: MouseEvent) {
@@ -109,14 +125,14 @@ export default function Navbar() {
                 <div className="h-px bg-neutral-200" />
 
                 <div className="py-2">
-                  {CATEGORIES.map((c) => (
+                  {categories.map((c) => (
                     <Link
-                      key={c.href}
-                      href={c.href}
+                      key={c.id}
+                      href={`/products?category=${c.slug}`}
                       onClick={() => setCatOpen(false)}
                       className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
                     >
-                      {c.label}
+                      {c.name}
                     </Link>
                   ))}
                 </div>
@@ -196,17 +212,14 @@ export default function Navbar() {
 
                   {mobileCatOpen && (
                     <div className="pb-2">
-                      {CATEGORIES.map((c) => (
+                      {categories.map((c) => (
                         <Link
-                          key={c.href}
-                          href={c.href}
-                          onClick={() => {
-                            setMenuOpen(false);
-                            setMobileCatOpen(false);
-                          }}
-                          className="block pl-8 pr-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition"
+                          key={c.id}
+                          href={`/products?category=${c.slug}`}
+                          onClick={() => setCatOpen(false)}
+                          className="block px-4 py-2 text-sm text-neutral-800 hover:bg-neutral-100 transition"
                         >
-                          {c.label}
+                          {c.name}
                         </Link>
                       ))}
                     </div>
